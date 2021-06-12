@@ -1,3 +1,7 @@
 .import
 .mono
 *.translation
+out
+*.csproj
+*.sln
+.vscode
