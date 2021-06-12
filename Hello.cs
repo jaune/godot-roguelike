@@ -15,14 +15,20 @@ public class Hello : Node2D
 
   public override void _UnhandledInput(InputEvent @event)
   {
+    var subject = GetNode<Sprite>("Character");
+
     if (@event is InputEventKey eventKey)
-      if (eventKey.Pressed && eventKey.Scancode == (int)KeyList.Escape) {
-        var label = new Label();
-
-        label.Text = "Escape";
-        label.RectPosition = new Vector2(0, counter+=30);
-
-        GetNode(".").AddChild(label);
+      if (eventKey.Pressed && eventKey.Scancode == (uint)KeyList.Up) {
+        subject.Translate(new Vector2(0, -32));
+      }
+      else if (eventKey.Pressed && eventKey.Scancode == (uint)KeyList.Down) {
+        subject.Translate(new Vector2(0, 32));
+      }
+      else if (eventKey.Pressed && eventKey.Scancode == (uint)KeyList.Right) {
+        subject.Translate(new Vector2(32, 0));
+      }
+      else if (eventKey.Pressed && eventKey.Scancode == (uint)KeyList.Left) {
+        subject.Translate(new Vector2(-32, 0));
       }
     }
 
