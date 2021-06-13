@@ -15,7 +15,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: export game
-      uses: firebelley/godot-export@v2.8.0
+      uses: firebelley/godot-export@3.0
       with:
         export_debug: false
         godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_linux_headless_64.zip
