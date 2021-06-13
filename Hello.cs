@@ -15,7 +15,7 @@ public class Hello : Node2D
 
   public override void _UnhandledInput(InputEvent @event)
   {
-    var subject = GetNode<Sprite>("Character");
+    var subject = GetNode<Node2D>("GameLayer/Kenney");
 
     if (@event is InputEventKey eventKey)
       if (eventKey.Pressed && eventKey.Scancode == (uint)KeyList.Up) {

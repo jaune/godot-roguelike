@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/character.png-7d161e056639ffa8fae932e906cc0673.stex"
+path="res://.import/foliagePack_003.png-9b19ce1411e5053d31cd0ea89c6f51f7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character.png"
-dest_files=[ "res://.import/character.png-7d161e056639ffa8fae932e906cc0673.stex" ]
+source_file="res://assets/KenneyFoliage/foliagePack_003.png"
+dest_files=[ "res://.import/foliagePack_003.png-9b19ce1411e5053d31cd0ea89c6f51f7.stex" ]
 
 [params]
 
