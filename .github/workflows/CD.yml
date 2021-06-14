@@ -27,9 +27,6 @@ jobs:
       run: |
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_linux_headless_64.zip
         unzip -q Godot_v3.3.2-stable_mono_linux_headless_64.zip
-    - uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '3.1.x'
     - name: create out directory
       run: |
         mkdir -p ${{ github.workspace }}/out
