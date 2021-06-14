@@ -28,6 +28,7 @@ jobs:
     - name: export game
       run: |
         mkdir -p out
+        pwd .
         cd Godot_v3.3.2-stable_mono_linux_headless_64
         ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
     - name: upload logs
