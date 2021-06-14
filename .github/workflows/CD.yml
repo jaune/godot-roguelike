@@ -22,7 +22,9 @@ jobs:
         mkdir -p ~/.godot
         unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot
         cd Godot_v3.3.2-stable_mono_linux_headless_64
+        ls ~/.godot
         ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
+        cat /home/runner/.local/share/godot/mono/mono_logs/*.log
     # - name: upload artifact
     #   uses: actions/upload-artifact@v2
     #   with:
