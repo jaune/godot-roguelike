@@ -14,17 +14,16 @@ jobs:
       uses: actions/checkout@v2.3.1
       with:
         fetch-depth: 0
-    - name: download godot & template
+    - name: download templates
+      run: |
+        wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_export_templates.tpz
+        unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot/3.3.2.stable.mono
+        mkdir -p ~/.godot/3.3.2.stable.mono
+    - name: download godot
       run: |
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_linux_headless_64.zip
-        wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_export_templates.tpz
         unzip -q Godot_v3.3.2-stable_mono_linux_headless_64.zip
-        mkdir -p ~/.godot
-        unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot
         cd Godot_v3.3.2-stable_mono_linux_headless_64
-        echo "--- FIND BEGIN ---"
-        find ~/.godot
-        echo "--- FIND END ---"
         ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
         echo "--- LOG BEGIN ---"
         cat /home/runner/.local/share/godot/mono/mono_logs/*
