@@ -19,11 +19,19 @@ jobs:
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_export_templates.tpz
         mkdir -p ~/.godot/3.3.2.stable.mono
         unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot/3.3.2.stable.mono
+        echo "--- 1 ---"
+        ls ~/.godot/3.3.2.stable.mono
+        echo "--- 2 ---"
+        ls /home/runner/.local/share/godot/templates/3.3.2.stable.mono
+        echo "--- 3 ---"
     - name: download godot
       run: |
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_linux_headless_64.zip
         unzip -q Godot_v3.3.2-stable_mono_linux_headless_64.zip
         cd Godot_v3.3.2-stable_mono_linux_headless_64
+        echo "--- 1 ---"
+        ls -la .
+        echo "--- 2 ---"
         ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
         echo "--- LOG BEGIN ---"
         cat /home/runner/.local/share/godot/mono/mono_logs/*
