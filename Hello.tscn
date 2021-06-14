@@ -12,16 +12,15 @@
 [ext_resource path="res://HoverArea.cs" type="Script" id=10]
 
 [node name="Scene" type="Node2D"]
-position = Vector2( 551.792, 334.167 )
 script = ExtResource( 1 )
 
 [node name="BackgroundLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="BackgroundLayer"]
 margin_left = -34.0
-margin_top = -7.5874
+margin_top = -9.26919
 margin_right = 1053.0
-margin_bottom = 652.413
+margin_bottom = 650.731
 color = Color( 0.368627, 0.854902, 0.466667, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -81,7 +80,7 @@ texture = ExtResource( 3 )
 position = Vector2( 784.824, 329.333 )
 
 [node name="Kenney" parent="GameLayer" instance=ExtResource( 2 )]
-position = Vector2( 551.857, 332.732 )
+position = Vector2( 555, 336 )
 
 [node name="Camera2D" type="Camera2D" parent="GameLayer/Kenney"]
 current = true
@@ -91,9 +90,9 @@ smoothing_enabled = true
 
 [node name="NorthRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
 margin_left = -46.9445
-margin_top = -189.632
+margin_top = -191.314
 margin_right = 49.0555
-margin_bottom = -93.632
+margin_bottom = -95.3138
 color = Color( 1, 0, 1, 0.12 )
 script = ExtResource( 10 )
 __meta__ = {

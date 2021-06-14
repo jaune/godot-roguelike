@@ -10,7 +10,15 @@ public class Hello : Node2D
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()
   {
+    var self = GetNode<CanvasLayer>("./GameLayer");
 
+    var kenneyPackedScene = ResourceLoader.Load<PackedScene>("res://Kenney.tscn");
+
+    var kenney = kenneyPackedScene.Instance<Node2D>();
+
+    kenney.Position = new Vector2(200, 336);
+
+    self.AddChild(kenney);
   }
 
   public override void _UnhandledInput(InputEvent @event)
