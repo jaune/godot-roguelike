@@ -34,11 +34,12 @@ jobs:
       run: |
         mkdir -p out
         cd Godot_v3.3.2-stable_mono_linux_headless_64
-        ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --locale en_US --build-solutions --export "Windows Desktop"
-    - name: upload logs
+        ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --build-solutions
+        ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
+    - name: upload mono's logs
       uses: actions/upload-artifact@v2
       with:
-        name: logs
+        name: mono-logs
         path: /home/runner/.local/share/godot/mono/mono_logs
     - name: upload export
       uses: actions/upload-artifact@v2
