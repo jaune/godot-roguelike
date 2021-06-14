@@ -19,8 +19,8 @@ jobs:
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_linux_headless_64.zip
         wget --no-verbose https://downloads.tuxfamily.org/godotengine/3.3.2/mono/Godot_v3.3.2-stable_mono_export_templates.tpz
         unzip -q Godot_v3.3.2-stable_mono_linux_headless_64.zip
-        mkdir -p ~/.godot/templates
-        unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot/templates
+        mkdir -p ~/.godot
+        unzip -q Godot_v3.3.2-stable_mono_export_templates.tpz -d ~/.godot
         cd Godot_v3.3.2-stable_mono_linux_headless_64
         ./Godot_v3.3.2-stable_mono_linux_headless.64 --path '../' --export "Windows Desktop"
     # - name: upload artifact
