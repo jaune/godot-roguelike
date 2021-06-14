@@ -35,7 +35,7 @@ jobs:
         mkdir -p ${{ github.workspace }}/out
     - name: build solutions
       run: |
-        ${{ github.workspace }}/Godot_v3.3.2-stable_mono_linux_headless_64/Godot_v3.3.2-stable_mono_linux_headless.64 --path ${{ github.workspace }} --build-solutions
+        ${{ github.workspace }}/Godot_v3.3.2-stable_mono_linux_headless_64/Godot_v3.3.2-stable_mono_linux_headless.64 --path ${{ github.workspace }} --build-solutions --quit
     - name: export
       run: |
         ${{ github.workspace }}/Godot_v3.3.2-stable_mono_linux_headless_64/Godot_v3.3.2-stable_mono_linux_headless.64 --path ${{ github.workspace }} --export "Windows Desktop"
