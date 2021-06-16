@@ -9,7 +9,7 @@
 [ext_resource path="res://assets/KenneyFoliage/foliagePack_001.png" type="Texture" id=7]
 [ext_resource path="res://assets/KenneyFoliage/foliagePack_021.png" type="Texture" id=8]
 [ext_resource path="res://assets/KenneyFoliage/foliagePack_020.png" type="Texture" id=9]
-[ext_resource path="res://HoverArea.cs" type="Script" id=10]
+[ext_resource path="res://MoveTiles.cs" type="Script" id=10]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 1 )
@@ -27,6 +27,20 @@ __meta__ = {
 }
 
 [node name="GameLayer" type="CanvasLayer" parent="."]
+
+[node name="Player" type="Node2D" parent="GameLayer"]
+position = Vector2( 525.412, 341.578 )
+
+[node name="Kenney" parent="GameLayer/Player" instance=ExtResource( 2 )]
+position = Vector2( 0, 0 )
+
+[node name="DefaultActions" type="Node2D" parent="GameLayer/Player"]
+script = ExtResource( 10 )
+
+[node name="Camera2D" type="Camera2D" parent="GameLayer/Player"]
+position = Vector2( 7.98816, -11.4505 )
+current = true
+smoothing_enabled = true
 
 [node name="foliage" type="Node2D" parent="GameLayer"]
 position = Vector2( 551.792, 334.167 )
@@ -77,104 +91,4 @@ position = Vector2( 913.077, 711.268 )
 texture = ExtResource( 3 )
 
 [node name="EvilKenney" parent="GameLayer" instance=ExtResource( 2 )]
-position = Vector2( 784.824, 329.333 )
-
-[node name="Kenney" parent="GameLayer" instance=ExtResource( 2 )]
-position = Vector2( 555, 336 )
-
-[node name="Camera2D" type="Camera2D" parent="GameLayer/Kenney"]
-current = true
-smoothing_enabled = true
-
-[node name="DefaultAction" type="Node2D" parent="GameLayer/Kenney"]
-
-[node name="NorthRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = -46.9445
-margin_top = -191.314
-margin_right = 49.0555
-margin_bottom = -95.3138
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NorthEastRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = 68.9358
-margin_top = -184.87
-margin_right = 164.936
-margin_bottom = -88.8698
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EastRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = 68.063
-margin_top = -65.0
-margin_right = 164.063
-margin_bottom = 31.0
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SouthEastRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = 65.2341
-margin_top = 44.9546
-margin_right = 161.234
-margin_bottom = 140.955
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WestRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = -162.298
-margin_top = -64.3089
-margin_right = -66.2979
-margin_bottom = 31.6911
-rect_pivot_offset = Vector2( 96, 12.1963 )
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SouthWestRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = -160.963
-margin_top = 46.4828
-margin_right = -64.963
-margin_bottom = 142.483
-rect_pivot_offset = Vector2( 96, 12.1963 )
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NorthWestRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = -157.536
-margin_top = -186.539
-margin_right = -61.5356
-margin_bottom = -90.5388
-rect_pivot_offset = Vector2( 96, 12.1963 )
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SouthRect" type="ColorRect" parent="GameLayer/Kenney/DefaultAction"]
-margin_left = -48.2645
-margin_top = 46.0149
-margin_right = 47.7355
-margin_bottom = 142.015
-color = Color( 1, 0, 1, 0.12 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+position = Vector2( 840.826, 373.988 )
