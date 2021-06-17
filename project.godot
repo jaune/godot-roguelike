@@ -18,6 +18,11 @@ config/icon="res://icon.png"
 
 window/size/resizable=false
 
+[global]
+
+C#=false
+Mono=false
+
 [logging]
 
 file_logging/enable_file_logging=true

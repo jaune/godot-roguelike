@@ -11,7 +11,7 @@ resource_name = "idle"
 loop = true
 step = 0.025
 tracks/0/type = "value"
-tracks/0/path = NodePath("../Kenney/head:position")
+tracks/0/path = NodePath("./head:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -23,7 +23,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1.49361, -165.348 ), Vector2( 1.49361, -163.346 ), Vector2( 1.49361, -165.348 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../Kenney/body:position")
+tracks/1/path = NodePath("./body:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
