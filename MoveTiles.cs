@@ -1,9 +1,11 @@
 using Godot;
-using System;
 
 public class MoveTiles : Node2D
 {
     private PackedScene? tileScene;
+
+    [Signal]
+    public delegate void OnCommand(Command cmd);
 
     public override void _Ready()
     {
@@ -19,6 +21,10 @@ public class MoveTiles : Node2D
       AddTile(CardinalDirection.NorthWest, new Vector2(-96, -96));
     }
 
+    public void __onCommand(Command cmd) {
+      EmitSignal("OnCommand", cmd);
+    }
+
     private Node? AddTile(CardinalDirection direction, Vector2 position) {
       if (tileScene == null) {
         return null;
@@ -29,6 +35,8 @@ public class MoveTiles : Node2D
       tile.direction = direction;
 
       tile.Position = position;
+
+      tile.Connect("OnCommand", this, nameof(__onCommand));
 
       this.AddChild(tile);
 
