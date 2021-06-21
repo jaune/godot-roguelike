@@ -2,6 +2,8 @@ using Godot;
 
 public class MoveTiles : Node2D
 {
+    const int TILE_SIZE = 96;
+
     private PackedScene? tileScene;
 
     [Signal]
@@ -11,14 +13,14 @@ public class MoveTiles : Node2D
     {
       tileScene = GD.Load<PackedScene>("./MoveTile.tscn");
 
-      AddTile(CardinalDirection.North, new Vector2(0, -96));
-      AddTile(CardinalDirection.NorthEast, new Vector2(96, -96));
-      AddTile(CardinalDirection.South, new Vector2(0, 96));
-      AddTile(CardinalDirection.SouthEast, new Vector2(96, 96));
-      AddTile(CardinalDirection.East, new Vector2(96, 0));
-      AddTile(CardinalDirection.SouthWest, new Vector2(-96, 96));
-      AddTile(CardinalDirection.West, new Vector2(-96, 0));
-      AddTile(CardinalDirection.NorthWest, new Vector2(-96, -96));
+      AddTile(CardinalDirection.North, new Vector2(0, -TILE_SIZE));
+      AddTile(CardinalDirection.NorthEast, new Vector2(TILE_SIZE, -TILE_SIZE));
+      AddTile(CardinalDirection.South, new Vector2(0, TILE_SIZE));
+      AddTile(CardinalDirection.SouthEast, new Vector2(TILE_SIZE, TILE_SIZE));
+      AddTile(CardinalDirection.East, new Vector2(TILE_SIZE, 0));
+      AddTile(CardinalDirection.SouthWest, new Vector2(-TILE_SIZE, TILE_SIZE));
+      AddTile(CardinalDirection.West, new Vector2(-TILE_SIZE, 0));
+      AddTile(CardinalDirection.NorthWest, new Vector2(-TILE_SIZE, -TILE_SIZE));
     }
 
     public void __onCommand(Command cmd) {

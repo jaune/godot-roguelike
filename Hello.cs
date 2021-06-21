@@ -5,7 +5,7 @@ using System;
 
 public class Hello : Node2D
 {
-  const int TILE_SIZE = 69;
+  const int TILE_SIZE = 96;
   Tween tween = new Tween();
 
   // Declare member variables here. Examples:
@@ -68,7 +68,7 @@ public class Hello : Node2D
         break;
     }
 
-    tween.InterpolateProperty(player, "position", player.Position, destination, 0.3f);
+    tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);
     tween.Start();
   }
 

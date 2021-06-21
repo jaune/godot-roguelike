@@ -63,15 +63,17 @@ position = Vector2( 913.077, 711.268 )
 texture = ExtResource( 3 )
 
 [node name="EvilKenney" parent="." instance=ExtResource( 2 )]
-position = Vector2( 840.826, 373.988 )
+modulate = Color( 0.831373, 0.239216, 0.239216, 1 )
+position = Vector2( 768, 384 )
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2( 525.412, 341.578 )
+position = Vector2( 384, 384 )
 
 [node name="Kenney" parent="Player" instance=ExtResource( 2 )]
 position = Vector2( 0, 0 )
 
 [node name="DefaultActions" type="Node2D" parent="Player"]
+position = Vector2( 0, -31.4289 )
 script = ExtResource( 10 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
