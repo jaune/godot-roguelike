@@ -1,7 +1,4 @@
 using Godot;
-using System;
-
-
 
 public class Hello : Node2D
 {
