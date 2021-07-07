@@ -65,8 +65,12 @@ public class MoveTile : Node2D
     // }
 
 
-    if (@event is InputEventMouseButton && @event.IsPressed() && icon != null && icon.Visible) {
-      EmitSignal(nameof(OnCommand), new MoveCommand(direction));
+    if (@event is InputEventMouseButton) {
+      var @btn = (InputEventMouseButton)@event;
+
+      if (@btn.IsPressed() && icon != null && icon.Visible && @btn.ButtonIndex == (int)ButtonList.Right) {
+        EmitSignal(nameof(OnCommand), new MoveCommand(direction));
+      }
     }
   }
 }

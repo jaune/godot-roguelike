@@ -2,10 +2,11 @@
 
 [ext_resource path="res://Hello.cs" type="Script" id=1]
 [ext_resource path="res://Kenney.tscn" type="PackedScene" id=2]
-[ext_resource path="res://MoveTiles.cs" type="Script" id=10]
+[ext_resource path="res://NavigationGridDebugNode.cs" type="Script" id=3]
 [ext_resource path="res://InfiniteFoliage.cs" type="Script" id=11]
 
 [node name="Scene" type="Node2D"]
+scale = Vector2( 0.5, 0.5 )
 script = ExtResource( 1 )
 
 [node name="InfiniteFoliage" type="Node2D" parent="."]
@@ -24,9 +25,36 @@ position = Vector2( 0, 0 )
 
 [node name="DefaultActions" type="Node2D" parent="Player"]
 position = Vector2( 0, -31.4289 )
-script = ExtResource( 10 )
+script = ExtResource( 3 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2( 7.98816, -11.4505 )
 current = true
 smoothing_enabled = true
+
+[node name="MoveTween" type="Tween" parent="Player"]
+
+[node name="Foreground" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="Foreground"]
+margin_left = 58.2704
+margin_top = 540.326
+margin_right = 445.27
+margin_bottom = 554.326
+text = "d sdf sdf sdf sdf sdf sdf sdf sdf sdf sd sdf sdfs dfs dfsd fsdfsdf"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+margin_left = -6.8811
+margin_top = -8.0
+margin_right = 1037.12
+margin_bottom = 615.0
+color = Color( 0.376471, 0.737255, 0.505882, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
