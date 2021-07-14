@@ -13,21 +13,21 @@ public class MoveTiles : Node2D
     {
       tileScene = GD.Load<PackedScene>("./MoveTile.tscn");
 
-      AddTile(CardinalDirection.North, new Vector2(0, -TILE_SIZE));
-      AddTile(CardinalDirection.NorthEast, new Vector2(TILE_SIZE, -TILE_SIZE));
-      AddTile(CardinalDirection.South, new Vector2(0, TILE_SIZE));
-      AddTile(CardinalDirection.SouthEast, new Vector2(TILE_SIZE, TILE_SIZE));
-      AddTile(CardinalDirection.East, new Vector2(TILE_SIZE, 0));
-      AddTile(CardinalDirection.SouthWest, new Vector2(-TILE_SIZE, TILE_SIZE));
-      AddTile(CardinalDirection.West, new Vector2(-TILE_SIZE, 0));
-      AddTile(CardinalDirection.NorthWest, new Vector2(-TILE_SIZE, -TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.North, new Vector2(0, -TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.NorthEast, new Vector2(TILE_SIZE, -TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.South, new Vector2(0, TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.SouthEast, new Vector2(TILE_SIZE, TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.East, new Vector2(TILE_SIZE, 0));
+      AddTile(Simulation.CardinalDirection.SouthWest, new Vector2(-TILE_SIZE, TILE_SIZE));
+      AddTile(Simulation.CardinalDirection.West, new Vector2(-TILE_SIZE, 0));
+      AddTile(Simulation.CardinalDirection.NorthWest, new Vector2(-TILE_SIZE, -TILE_SIZE));
     }
 
     public void __onCommand(Command cmd) {
       EmitSignal("OnCommand", cmd);
     }
 
-    private Node? AddTile(CardinalDirection direction, Vector2 position) {
+    private Node? AddTile(Simulation.CardinalDirection direction, Vector2 position) {
       if (tileScene == null) {
         return null;
       }

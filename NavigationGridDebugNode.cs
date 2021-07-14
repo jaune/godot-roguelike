@@ -12,8 +12,26 @@ class NavigationGridDebugNode : Node2D {
 
   NavigationGrid? grid = null;
 
+  Sprite? moveSprite = null;
+
+  Texture? moveTex = null;
+  Texture? attackTex = null;
+
   public override void _Ready()
   {
+    moveTex = ResourceLoader.Load<Texture>("res://assets/move-icon.png");
+    attackTex = ResourceLoader.Load<Texture>("res://assets/sabers-choc.png");
+
+    moveSprite = new Sprite();
+
+    moveSprite.Texture = moveTex;
+    // moveSprite.Visible = false;
+    moveSprite.Scale = new Vector2(0.1875f, 0.1875f);
+    moveSprite.ZAsRelative = false;
+    moveSprite.ZIndex = 100;
+
+    AddChild(moveSprite);
+
     // var plainArrow = ResourceLoader.Load<Texture>("res://assets/plain-arrow.png");
     // var charTex = ResourceLoader.Load<Texture>("res://assets/character.png");
     // var haltTex = ResourceLoader.Load<Texture>("res://assets/halt.png");
@@ -79,46 +97,106 @@ class NavigationGridDebugNode : Node2D {
   }
 
   public override void _Input (InputEvent @event) {
-    // if (@event is InputEventMouse) {
-    //   var @m = (InputEventMouse)@event;
+    var sim = Simulation.GetInstance();
+    var state = sim.GetState();
 
-    //   var (x, y) = computeGridPositionFromViewport(@m.Position);
+    if (@event is InputEventMouseMotion) {
+      var @m = (InputEventMouseMotion)@event;
+      var vector = (@m.Position - (GetViewport().Size / 2.0f));
 
-    //   var path = grid?.computePath(x, y);
+      if (moveSprite != null){
+        var dir = CardinalDirectionFromVector2(vector);
+        var v = Vector2FromCardinalDirection(dir);
 
-    //   if (path != null) {
-    //     GD.Print("(",x, ",", y, "): ", path.Length);
-    //   }
-    // }
+        var dest = state.player.Position.Project(dir);
+        var enemy = sim.QueryEnemyAt(dest);
 
-    if (@event is InputEventMouseButton) {
+        if (enemy == null) {
+          moveSprite.Texture = moveTex;
+        }
+        else {
+          moveSprite.Texture = attackTex;
+        }
+
+        moveSprite.Position = new Vector2(
+           v.x * (float)TILE_SIZE,
+           v.y * (float)TILE_SIZE
+        );
+      }
+    }
+    else if (@event is InputEventMouseButton) {
       var @btn = (InputEventMouseButton)@event;
 
       if (@btn.IsPressed() && @btn.ButtonIndex == (int)ButtonList.Right) {
         var vector = (@btn.Position - (GetViewport().Size / 2.0f));
+        var dir = CardinalDirectionFromVector2(vector);
 
+        var dest = state.player.Position.Project(dir);
+        var enemy = sim.QueryEnemyAt(dest);
 
-        EmitSignal(nameof(OnCommand), new MoveCommand(CardinalDirectionFromVector2(vector)));
+        if (enemy == null) {
+          EmitSignal(nameof(OnCommand), new MoveCommand(dir));
+        }
+        else {
+          EmitSignal(nameof(OnCommand), new DefaultAttackCommand(dir));
+        }
       }
     }
   }
 
-  static CardinalDirection[] CARDINAL_MAPPING = new CardinalDirection[]{
-    CardinalDirection.North,
-    CardinalDirection.NorthEast,
-    CardinalDirection.East,
-    CardinalDirection.SouthEast,
-    CardinalDirection.South,
-    CardinalDirection.SouthWest,
-    CardinalDirection.West,
-    CardinalDirection.NorthWest
+  static Vector2 Vector2FromCardinalDirection(Simulation.CardinalDirection d) {
+    var destination = new Vector2();
+
+    switch (d) {
+      case Simulation.CardinalDirection.North:
+        destination.y -= 1;
+        break;
+      case Simulation.CardinalDirection.NorthEast:
+        destination.x += 1;
+        destination.y -= 1;
+        break;
+      case Simulation.CardinalDirection.East:
+        destination.x += 1;
+        break;
+      case Simulation.CardinalDirection.SouthEast:
+        destination.x += 1;
+        destination.y += 1;
+        break;
+      case Simulation.CardinalDirection.South:
+        destination.y += 1;
+        break;
+      case Simulation.CardinalDirection.SouthWest:
+        destination.x -= 1;
+        destination.y += 1;
+        break;
+      case Simulation.CardinalDirection.West:
+        destination.x -= 1;
+        break;
+      case Simulation.CardinalDirection.NorthWest:
+        destination.x -= 1;
+        destination.y -= 1;
+        break;
+    }
+
+    return destination;
+  }
+
+  static Simulation.CardinalDirection[] CARDINAL_MAPPING = new Simulation.CardinalDirection[]{
+    Simulation.CardinalDirection.North,
+    Simulation.CardinalDirection.NorthEast,
+    Simulation.CardinalDirection.East,
+    Simulation.CardinalDirection.SouthEast,
+    Simulation.CardinalDirection.South,
+    Simulation.CardinalDirection.SouthWest,
+    Simulation.CardinalDirection.West,
+    Simulation.CardinalDirection.NorthWest
   };
 
-  static CardinalDirection CardinalDirectionFromDegrees(float angle) {
+  static Simulation.CardinalDirection CardinalDirectionFromDegrees(float angle) {
     var a = (angle + 360.0f + 22.5f) % 360.0f;
     var idx = Mathf.CeilToInt(a / 45.0f) - 1;
 
-    CardinalDirection direction = CARDINAL_MAPPING[idx];
+    Simulation.CardinalDirection direction = CARDINAL_MAPPING[idx];
 
     return direction;
   }
@@ -131,7 +209,7 @@ class NavigationGridDebugNode : Node2D {
     return a;
   }
 
-  static CardinalDirection CardinalDirectionFromVector2(Vector2 vector) {
+  static Simulation.CardinalDirection CardinalDirectionFromVector2(Vector2 vector) {
     var a = DegreesFromVector2(vector);
 
     return CardinalDirectionFromDegrees(a);

@@ -6,7 +6,7 @@ public class MoveTile : Node2D
   public delegate void OnCommand(Command cmd);
 
   [Export(PropertyHint.Enum)]
-  public CardinalDirection direction = CardinalDirection.None;
+  public Simulation.CardinalDirection direction = Simulation.CardinalDirection.None;
 
   private ColorRect? rect;
 
