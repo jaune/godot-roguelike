@@ -97,7 +97,7 @@ class NavigationGridDebugNode : Node2D {
   }
 
   public override void _Input (InputEvent @event) {
-    var sim = Simulation.GetInstance();
+    var sim = Simulation.Simulation.GetInstance();
     var state = sim.GetState();
 
     if (@event is InputEventMouseMotion) {

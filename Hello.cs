@@ -4,7 +4,7 @@ public class Hello : Node2D
 {
   const int TILE_SIZE = 96;
 
-  Simulation sim = Simulation.GetInstance();
+  Simulation.Simulation sim = Simulation.Simulation.GetInstance();
 
   private bool busy = false;
 
