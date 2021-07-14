@@ -41,9 +41,36 @@ public class Kenney : Node2D
     }
   }
 
+  PackedScene? HealthParticulePackedScene = null;
+
   public override void _Ready()
   {
+    HealthParticulePackedScene = ResourceLoader.Load<PackedScene>("res://HealthParticule.tscn");
+
+
     UpdateForeground();
+  }
+
+  private void TravelAnimationTreeTo(string name) {
+    var animationTree = GetNode<AnimationTree>("AnimationTree");
+    var playBack = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
+    playBack.Travel(name);
+  }
+
+  private void _OnDeath() {
+    TravelAnimationTreeTo("death");
+  }
+
+  private void _OnHit(int damage) {
+    var particule = HealthParticulePackedScene?.Instance<HealthParticule>();
+
+    if (particule != null) {
+      particule.Value = damage;
+
+      AddChild(particule);
+    }
+
+    TravelAnimationTreeTo("hit");
   }
 
   public void _Mutation() {
@@ -51,9 +78,20 @@ public class Kenney : Node2D
       var c = Simulation.Simulation.GetInstance().QueryCharacterByReference(Reference);
 
       if (c != null) {
-        _MaximumHealth = c.MaximumHealth;
-        _CurrentHealth = c.CurrentHealth;
-        UpdateForeground();
+        var delta = c.CurrentHealth - _CurrentHealth;
+
+        if (delta < 0) {
+          _OnHit(Math.Abs(Mathf.RoundToInt(delta)));
+
+          if (c.CurrentHealth <= 0) {
+            _OnDeath();
+          }
+        }
+        if (delta != 0) {
+          _CurrentHealth = c.CurrentHealth;
+          _MaximumHealth = c.MaximumHealth;
+          UpdateForeground();
+        }
       }
     }
   }
