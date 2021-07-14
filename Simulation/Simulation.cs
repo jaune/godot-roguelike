@@ -1,3 +1,5 @@
+using System;
+
 namespace Simulation
 {
   class Simulation {
@@ -22,17 +24,21 @@ namespace Simulation
       return Instance;
     }
 
-    private void PerformMove(Position destination) {
+    private Mutation[] PerformMove(Position destination) {
       var other = state.characters.Find(c => c.Position.Equals(destination));
 
       if (other == null) {
         state.player.Position.x = destination.x;
         state.player.Position.y = destination.y;
       }
+
+      return new Mutation[0];
     }
 
-    private void PerformDefaultAttack(Character target) {
+    private Mutation[] PerformDefaultAttack(Character target) {
       target.CurrentHealth -= 10;
+
+      return new Mutation[0];
     }
 
     public Character? QueryEnemyAt(int x, int y) {
@@ -43,44 +49,55 @@ namespace Simulation
       return state.characters.Find(c => c.Position.Equals(pos));
     }
 
-    private void ExecuteDefaultCommand(DefaultCommand cmd) {
+    public Character? QueryCharacterByReference(Guid reference) {
+      return state.characters.Find(c => c.Reference == reference);
+    }
+
+    private Mutation[] ExecuteDefaultCommand(DefaultCommand cmd) {
       var destination = state.player.Position.Project(cmd.direction);
       var target = QueryEnemyAt(destination);
 
       if (target == null) {
-        PerformMove(destination);
+        return PerformMove(destination);
       }
       else {
-        PerformDefaultAttack(target);
+        return PerformDefaultAttack(target);
       }
     }
 
-    private void ExecuteMoveCommand(MoveCommand cmd) {
+    private Mutation[] ExecuteMoveCommand(MoveCommand cmd) {
       var destination = state.player.Position.Project(cmd.direction);
 
-      PerformMove(destination);
+      return PerformMove(destination);
     }
 
-    private void ExecuteDefaultAttackCommand(DefaultAttackCommand cmd) {
+    private Mutation[] ExecuteDefaultAttackCommand(DefaultAttackCommand cmd) {
       var destination = state.player.Position.Project(cmd.direction);
       var target = QueryEnemyAt(destination);
 
       if (target != null) {
-        PerformDefaultAttack(target);
+        return PerformDefaultAttack(target);
       }
+
+      return new Mutation[0];
     }
 
-    public void Execute(Command cmd) {
+    public Mutation[] Execute(Command cmd) {
       if (cmd is MoveCommand) {
-        ExecuteMoveCommand((MoveCommand)cmd);
+        return ExecuteMoveCommand((MoveCommand)cmd);
       }
       else if (cmd is DefaultAttackCommand) {
-        ExecuteDefaultAttackCommand((DefaultAttackCommand)cmd);
+        return ExecuteDefaultAttackCommand((DefaultAttackCommand)cmd);
       }
       else if (cmd is DefaultCommand) {
-        ExecuteDefaultCommand((DefaultCommand)cmd);
+        return ExecuteDefaultCommand((DefaultCommand)cmd);
       }
+
+      return new Mutation[0];
     }
+  }
+
+  public class Mutation {
   }
 }
 

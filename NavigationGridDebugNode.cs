@@ -10,7 +10,7 @@ class NavigationGridDebugNode : Node2D {
     EmitSignal("OnCommand", cmd);
   }
 
-  NavigationGrid? grid = null;
+  // NavigationGrid? grid = null;
 
   Sprite? moveSprite = null;
 

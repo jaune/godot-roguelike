@@ -3,7 +3,7 @@ using System;
 
 public class Kenney : Node2D
 {
-  public Guid? Reference = null;
+  public Guid Reference = Guid.Empty;
 
   private int _CurrentHealth = 100;
 
@@ -34,7 +34,7 @@ public class Kenney : Node2D
   private void UpdateForeground() {
     var foreground = GetNode<ColorRect>("health/foreground");
 
-    var ratio = (float)_CurrentHealth / (float)_MaximumHealth;
+    var ratio = Mathf.Max(0.0f, (float)_CurrentHealth / (float)_MaximumHealth);
 
     if (foreground != null) {
       foreground.RectScale = new Vector2(ratio, 1.0f);
@@ -46,14 +46,15 @@ public class Kenney : Node2D
     UpdateForeground();
   }
 
-  public override void _EnterTree()
-  {
-    base._EnterTree();
-  }
+  public void _Mutation() {
+    if (Reference != Guid.Empty) {
+      var c = Simulation.Simulation.GetInstance().QueryCharacterByReference(Reference);
 
-  public override void _ExitTree()
-  {
-    base._ExitTree();
-
+      if (c != null) {
+        _MaximumHealth = c.MaximumHealth;
+        _CurrentHealth = c.CurrentHealth;
+        UpdateForeground();
+      }
+    }
   }
 }

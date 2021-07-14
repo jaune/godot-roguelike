@@ -42,7 +42,7 @@ public class MoveTile : Node2D
     }
   }
 
-  private bool hover = false;
+  // private bool hover = false;
 
   public override void _Input (InputEvent @event) {
     // if (@event is InputEventMouse) {

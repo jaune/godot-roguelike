@@ -56,7 +56,9 @@ public class Hello : Node2D
 
     busy = true;
 
-    sim.Execute(cmd);
+    var mutations = sim.Execute(cmd);
+
+    GetTree().CallGroup("simulation.mutable", "_Mutation");
 
     interpolateScene();
 
@@ -105,8 +107,10 @@ public class Hello : Node2D
         kenney.Position = new Vector2(c.Position.x * TILE_SIZE, c.Position.y * TILE_SIZE);
         kenney.MaximumHealth = c.MaximumHealth;
         kenney.CurrentHealth = c.CurrentHealth;
+        kenney.AddToGroup("simulation.mutable");
 
         AddChild(kenney);
+
       }
     }
   }
