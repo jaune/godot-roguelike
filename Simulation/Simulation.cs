@@ -1,31 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace Simulation
 {
-  class Simulation {
+  public class Simulation {
     private State state;
     private Mutation[] lastMutations;
-
-    public State GetState() {
-      return state;
-    }
 
     public Mutation[] GetLastMutations() {
       return lastMutations;
     }
 
-    private Simulation() {
+    public Simulation() {
       this.state = new State();
       this.lastMutations = new Mutation[0];
-    }
-
-    static private Simulation? Instance = null;
-
-    static public Simulation GetInstance () {
-      if (Instance == null) {
-        Instance = new Simulation();
-      }
-      return Instance;
     }
 
     private Mutation[] PerformMove(Position destination) {
@@ -55,6 +43,10 @@ namespace Simulation
       return state.player;
     }
 
+    public List<Actor> QueryActorsNear(Actor subject) {
+      return state.characters;
+    }
+
     public Actor? QueryEnemyAt(int x, int y) {
       return QueryEnemyAt(new Position(x, y));
     }
@@ -63,7 +55,7 @@ namespace Simulation
       return state.characters.Find(c => c.Position.Equals(pos));
     }
 
-    public Actor? QueryCharacterByReference(Guid reference) {
+    public Actor? QueryActorByReference(Guid reference) {
       return state.characters.Find(c => c.Reference == reference);
     }
 
@@ -113,31 +105,27 @@ namespace Simulation
 
       return mutations;
     }
-  }
 
-  public interface Mutation {
-  }
+    public void Mutate(Mutation m) {
+      if (m is AddActorMutation) {
+        var c = (AddActorMutation)m;
 
-  public class MoveMutation: Mutation {
-    public readonly Actor Subject;
-    public readonly Position Destination;
-
-    public MoveMutation(Actor subject, Position destination) {
-      this.Subject = subject;
-      this.Destination = destination;
+        state.characters.Add(c.Actor);
+      }
     }
   }
 
-  public class DefaultAttackMutation: Mutation {
-    public readonly Actor Subject;
-    public readonly Actor Target;
-    public readonly int Damage;
+  public static class AddActorMutationExtensions {
+    public static void AddActor(this Simulation sim, Actor actor) {
+      sim.Mutate(new AddActorMutation(actor));
+    }
+  }
 
-    public DefaultAttackMutation(Actor subject, Actor target, int damage) {
-      this.Subject = subject;
-      this.Target = target;
-      this.Damage = damage;
+  public class AddActorMutation: Mutation {
+    public Actor Actor;
+
+    public AddActorMutation(Actor actor) {
+      Actor = actor;
     }
   }
 }
-

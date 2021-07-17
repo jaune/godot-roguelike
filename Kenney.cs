@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Simulation;
 
 public class Kenney : Node2D
 {
@@ -79,7 +80,7 @@ public class Kenney : Node2D
 
   public void _OnMutations() {
     if (Reference != Guid.Empty) {
-      var c = Simulation.Simulation.GetInstance().QueryCharacterByReference(Reference);
+      var c = SimulationSingleton.GetInstance().QueryActorByReference(Reference);
 
       if (c != null) {
         var delta = c.CurrentHealth - _CurrentHealth;

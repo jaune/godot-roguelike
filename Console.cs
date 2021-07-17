@@ -1,9 +1,10 @@
 using Godot;
+using Simulation;
 
 public class Console : RichTextLabel
 {
   public void _OnMutations() {
-    var mutations = Simulation.Simulation.GetInstance().GetLastMutations();
+    var mutations = SimulationSingleton.GetInstance().GetLastMutations();
 
     foreach (var mutation in mutations) {
       AppendBbcode("\n" + mutation.ToConsoleString());

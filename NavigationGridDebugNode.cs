@@ -1,4 +1,5 @@
 using Godot;
+using Simulation;
 
 class NavigationGridDebugNode : Node2D {
   const int TILE_SIZE = 96;
@@ -97,7 +98,7 @@ class NavigationGridDebugNode : Node2D {
   }
 
   public override void _Input (InputEvent @event) {
-    var sim = Simulation.Simulation.GetInstance();
+    var sim = SimulationSingleton.GetInstance();
     var player = sim.QueryPlayer();
 
     if (player == null) {

@@ -1,10 +1,12 @@
 using Godot;
+using Simulation;
+
 
 public class Hello : Node2D
 {
   const int TILE_SIZE = 96;
 
-  Simulation.Simulation sim = Simulation.Simulation.GetInstance();
+  Simulation.Simulation sim = SimulationSingleton.GetInstance();
 
   private bool busy = false;
 
@@ -66,14 +68,12 @@ public class Hello : Node2D
   }
 
   private void initializeState() {
-    Simulation.State state = sim.GetState();
-
     {
       var enemy = new Simulation.Actor("Enemy");
 
       enemy.Position.Set(5, 5);
 
-      state.characters.Add(enemy);
+      sim.AddActor(enemy);
     }
 
     {
@@ -82,12 +82,18 @@ public class Hello : Node2D
       enemy.Position.Set(8, 8);
       enemy.CurrentHealth = 10;
 
-      state.characters.Add(enemy);
+      sim.AddActor(enemy);
     }
   }
 
   private void synchronizeScene () {
-    Simulation.State state = sim.GetState();
+    var p = sim.QueryPlayer();
+
+    if (p == null) {
+      return;
+    }
+
+    var actors = sim.QueryActorsNear(p);
 
     var player = GetNode<Node2D>("./Player");
 
@@ -96,17 +102,17 @@ public class Hello : Node2D
       return;
     }
 
-    foreach (var c in state.characters) {
-      if (c == state.player) {
-        player.Position = new Vector2(c.Position.x * TILE_SIZE, c.Position.y * TILE_SIZE);
+    foreach (var a in actors) {
+      if (a == p) {
+        player.Position = new Vector2(a.Position.x * TILE_SIZE, a.Position.y * TILE_SIZE);
       }
       else {
         var kenney = kenneyPackedScene.Instance<Kenney>();
 
-        kenney.Reference = c.Reference;
-        kenney.Position = new Vector2(c.Position.x * TILE_SIZE, c.Position.y * TILE_SIZE);
-        kenney.MaximumHealth = c.MaximumHealth;
-        kenney.CurrentHealth = c.CurrentHealth;
+        kenney.Reference = a.Reference;
+        kenney.Position = new Vector2(a.Position.x * TILE_SIZE, a.Position.y * TILE_SIZE);
+        kenney.MaximumHealth = a.MaximumHealth;
+        kenney.CurrentHealth = a.CurrentHealth;
         kenney.AddToGroup("simulation.mutations.listener");
 
         AddChild(kenney);
@@ -119,9 +125,13 @@ public class Hello : Node2D
     var player = GetNode<Node2D>("./Player");
     var tween = player.GetNode<Tween>("./MoveTween");
 
-    Simulation.State state = sim.GetState();
+    var p = sim.QueryPlayer();
 
-    var destination = new Vector2(state.player.Position.x * TILE_SIZE, state.player.Position.y * TILE_SIZE);
+    if (p == null) {
+      return;
+    }
+
+    var destination = new Vector2(p.Position.x * TILE_SIZE, p.Position.y * TILE_SIZE);
 
     tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);
     tween.Start();
