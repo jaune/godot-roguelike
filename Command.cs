@@ -1,4 +1,4 @@
-// Commands are verb perform by the player with the perspective of the player
+// Commands are actions performed by the player with the perspective of the player
 public class Command: Godot.Object {
 }
 
