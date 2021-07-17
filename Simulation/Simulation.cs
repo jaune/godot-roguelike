@@ -51,6 +51,10 @@ namespace Simulation
       };
     }
 
+    public Character? QueryPlayer() {
+      return state.player;
+    }
+
     public Character? QueryEnemyAt(int x, int y) {
       return QueryEnemyAt(new Position(x, y));
     }

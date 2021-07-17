@@ -98,7 +98,11 @@ class NavigationGridDebugNode : Node2D {
 
   public override void _Input (InputEvent @event) {
     var sim = Simulation.Simulation.GetInstance();
-    var state = sim.GetState();
+    var player = sim.QueryPlayer();
+
+    if (player == null) {
+      return;
+    }
 
     if (@event is InputEventMouseMotion) {
       var @m = (InputEventMouseMotion)@event;
@@ -108,7 +112,7 @@ class NavigationGridDebugNode : Node2D {
         var dir = CardinalDirectionFromVector2(vector);
         var v = Vector2FromCardinalDirection(dir);
 
-        var dest = state.player.Position.Project(dir);
+        var dest = player.Position.Project(dir);
         var enemy = sim.QueryEnemyAt(dest);
 
         if (enemy == null) {
@@ -131,7 +135,7 @@ class NavigationGridDebugNode : Node2D {
         var vector = (@btn.Position - (GetViewport().Size / 2.0f));
         var dir = CardinalDirectionFromVector2(vector);
 
-        var dest = state.player.Position.Project(dir);
+        var dest = player.Position.Project(dir);
         var enemy = sim.QueryEnemyAt(dest);
 
         if (enemy == null) {
