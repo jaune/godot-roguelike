@@ -69,7 +69,7 @@ public class Hello : Node2D
     Simulation.State state = sim.GetState();
 
     {
-      var enemy = new Simulation.Character("Enemy");
+      var enemy = new Simulation.Actor("Enemy");
 
       enemy.Position.Set(5, 5);
 
@@ -77,7 +77,7 @@ public class Hello : Node2D
     }
 
     {
-      var enemy = new Simulation.Character("Enemy");
+      var enemy = new Simulation.Actor("Enemy");
 
       enemy.Position.Set(8, 8);
       enemy.CurrentHealth = 10;

@@ -41,7 +41,7 @@ namespace Simulation
       };
     }
 
-    private Mutation[] PerformDefaultAttack(Character target) {
+    private Mutation[] PerformDefaultAttack(Actor target) {
       target.CurrentHealth -= 10;
 
       // TODO: if (target.CurrentHealth <= 0) death mutation
@@ -51,19 +51,19 @@ namespace Simulation
       };
     }
 
-    public Character? QueryPlayer() {
+    public Actor? QueryPlayer() {
       return state.player;
     }
 
-    public Character? QueryEnemyAt(int x, int y) {
+    public Actor? QueryEnemyAt(int x, int y) {
       return QueryEnemyAt(new Position(x, y));
     }
 
-    public Character? QueryEnemyAt(Position pos) {
+    public Actor? QueryEnemyAt(Position pos) {
       return state.characters.Find(c => c.Position.Equals(pos));
     }
 
-    public Character? QueryCharacterByReference(Guid reference) {
+    public Actor? QueryCharacterByReference(Guid reference) {
       return state.characters.Find(c => c.Reference == reference);
     }
 
@@ -119,21 +119,21 @@ namespace Simulation
   }
 
   public class MoveMutation: Mutation {
-    public readonly Character Subject;
+    public readonly Actor Subject;
     public readonly Position Destination;
 
-    public MoveMutation(Character subject, Position destination) {
+    public MoveMutation(Actor subject, Position destination) {
       this.Subject = subject;
       this.Destination = destination;
     }
   }
 
   public class DefaultAttackMutation: Mutation {
-    public readonly Character Subject;
-    public readonly Character Target;
+    public readonly Actor Subject;
+    public readonly Actor Target;
     public readonly int Damage;
 
-    public DefaultAttackMutation(Character subject, Character target, int damage) {
+    public DefaultAttackMutation(Actor subject, Actor target, int damage) {
       this.Subject = subject;
       this.Target = target;
       this.Damage = damage;
