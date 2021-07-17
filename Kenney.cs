@@ -62,10 +62,14 @@ public class Kenney : Node2D
   }
 
   private void _OnHit(int damage) {
+    var p = GetNode<Node2D>("health").Position;
+
     var particule = HealthParticulePackedScene?.Instance<HealthParticule>();
 
     if (particule != null) {
       particule.Value = damage;
+
+      particule.Position = p + new Vector2(0, 15);
 
       AddChild(particule);
     }
