@@ -4,15 +4,19 @@ namespace Simulation
 {
   class Simulation {
     private State state;
+    private Mutation[] lastMutations;
 
     public State GetState() {
       return state;
     }
 
-    private Simulation() {
-      var state = new State();
+    public Mutation[] GetLastMutations() {
+      return lastMutations;
+    }
 
-      this.state = state;
+    private Simulation() {
+      this.state = new State();
+      this.lastMutations = new Mutation[0];
     }
 
     static private Simulation? Instance = null;
@@ -32,13 +36,19 @@ namespace Simulation
         state.player.Position.y = destination.y;
       }
 
-      return new Mutation[0];
+      return new Mutation[]{
+        new MoveMutation(state.player, destination)
+      };
     }
 
     private Mutation[] PerformDefaultAttack(Character target) {
       target.CurrentHealth -= 10;
 
-      return new Mutation[0];
+      // TODO: if (target.CurrentHealth <= 0) death mutation
+
+      return new Mutation[]{
+        new DefaultAttackMutation(state.player, target, 10)
+      };
     }
 
     public Character? QueryEnemyAt(int x, int y) {
@@ -83,21 +93,47 @@ namespace Simulation
     }
 
     public Mutation[] Execute(Command cmd) {
+      var mutations = new Mutation[0];
+
       if (cmd is MoveCommand) {
-        return ExecuteMoveCommand((MoveCommand)cmd);
+        mutations = ExecuteMoveCommand((MoveCommand)cmd);
       }
       else if (cmd is DefaultAttackCommand) {
-        return ExecuteDefaultAttackCommand((DefaultAttackCommand)cmd);
+        mutations = ExecuteDefaultAttackCommand((DefaultAttackCommand)cmd);
       }
       else if (cmd is DefaultCommand) {
-        return ExecuteDefaultCommand((DefaultCommand)cmd);
+        mutations = ExecuteDefaultCommand((DefaultCommand)cmd);
       }
 
-      return new Mutation[0];
+      this.lastMutations = mutations;
+
+      return mutations;
     }
   }
 
-  public class Mutation {
+  public interface Mutation {
+  }
+
+  public class MoveMutation: Mutation {
+    public readonly Character Subject;
+    public readonly Position Destination;
+
+    public MoveMutation(Character subject, Position destination) {
+      this.Subject = subject;
+      this.Destination = destination;
+    }
+  }
+
+  public class DefaultAttackMutation: Mutation {
+    public readonly Character Subject;
+    public readonly Character Target;
+    public readonly int Damage;
+
+    public DefaultAttackMutation(Character subject, Character target, int damage) {
+      this.Subject = subject;
+      this.Target = target;
+      this.Damage = damage;
+    }
   }
 }
 

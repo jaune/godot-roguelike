@@ -28,6 +28,10 @@ namespace Simulation
       return other.x == this.x && other.y == this.y;
     }
 
+    public override string ToString() {
+      return $"Position({this.x},{this.y})";
+    }
+
     public Position Project(CardinalDirection d) {
       var copy = new Position(this);
 

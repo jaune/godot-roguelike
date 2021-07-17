@@ -7,10 +7,12 @@ namespace Simulation
     public Position Position;
     public int CurrentHealth = 100;
     public int MaximumHealth = 100;
+    public string DisplayName;
 
-    public Character() {
+    public Character(string name) {
       Reference = Guid.NewGuid();
       Position = new Position();
+      DisplayName = name;
     }
   }
 }

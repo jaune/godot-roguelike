@@ -58,7 +58,7 @@ public class Hello : Node2D
 
     var mutations = sim.Execute(cmd);
 
-    GetTree().CallGroup("simulation.mutable", "_Mutation");
+    GetTree().CallGroup("simulation.mutations.listener", "_OnMutations");
 
     interpolateScene();
 
@@ -69,7 +69,7 @@ public class Hello : Node2D
     Simulation.State state = sim.GetState();
 
     {
-      var enemy = new Simulation.Character();
+      var enemy = new Simulation.Character("Enemy");
 
       enemy.Position.Set(5, 5);
 
@@ -77,7 +77,7 @@ public class Hello : Node2D
     }
 
     {
-      var enemy = new Simulation.Character();
+      var enemy = new Simulation.Character("Enemy");
 
       enemy.Position.Set(8, 8);
       enemy.CurrentHealth = 10;
@@ -107,7 +107,7 @@ public class Hello : Node2D
         kenney.Position = new Vector2(c.Position.x * TILE_SIZE, c.Position.y * TILE_SIZE);
         kenney.MaximumHealth = c.MaximumHealth;
         kenney.CurrentHealth = c.CurrentHealth;
-        kenney.AddToGroup("simulation.mutable");
+        kenney.AddToGroup("simulation.mutations.listener");
 
         AddChild(kenney);
 
@@ -122,8 +122,6 @@ public class Hello : Node2D
     Simulation.State state = sim.GetState();
 
     var destination = new Vector2(state.player.Position.x * TILE_SIZE, state.player.Position.y * TILE_SIZE);
-
-    GD.Print("player: ", state.player.Position.x, ",", state.player.Position.y);
 
     tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);
     tween.Start();

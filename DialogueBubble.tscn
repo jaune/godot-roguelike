@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://dialogue_bubble_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/dialogue-bubble-anchor.png" type="Texture" id=2]
+
+[node name="DialogueBubble" type="Node2D"]
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_left = -196.118
+margin_top = -118.64
+margin_right = 205.882
+margin_bottom = -36.6396
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 394.0
+margin_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_size = 3
+text = "Accenderat super his incitatum propositum ad nocendum aliqua mulier vilis, quae ad palatium ut poposcerat intromissa insidias ei latenter obtendi prodiderat a militibus obscurissimis. quam Constantina exultans ut in tuto iam locata mariti salute muneratam vehiculoque inpositam per regiae ianuas emisit in publicum, ut his inlecebris alios quoque ad indicanda proliceret paria vel maiora."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="dialogue-bubble-anchor" type="Sprite" parent="."]
+modulate = Color( 0.2, 0.164706, 0.262745, 1 )
+position = Vector2( 16.5652, -18.0118 )
+texture = ExtResource( 2 )

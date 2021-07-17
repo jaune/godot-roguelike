@@ -51,7 +51,7 @@ public class InfiniteFoliage : Node2D
     var tile = GetCurrentTile();
 
     if (currentTile == null || currentTile != tile) {
-      GD.Print(tile);
+      // GD.Print(tile);
       currentTile = tile;
     }
   }
