@@ -1,5 +1,5 @@
 // Commands are actions performed by the player with the perspective of the player
-public class Command: Godot.Object {
+public class Command {
 }
 
 class MoveCommand: Command {

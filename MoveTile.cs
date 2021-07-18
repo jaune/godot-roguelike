@@ -2,9 +2,6 @@ using Godot;
 
 public class MoveTile : Node2D
 {
-  [Signal]
-  public delegate void OnCommand(Command cmd);
-
   [Export(PropertyHint.Enum)]
   public Simulation.CardinalDirection direction = Simulation.CardinalDirection.None;
 
@@ -69,7 +66,7 @@ public class MoveTile : Node2D
       var @btn = (InputEventMouseButton)@event;
 
       if (@btn.IsPressed() && icon != null && icon.Visible && @btn.ButtonIndex == (int)ButtonList.Right) {
-        EmitSignal(nameof(OnCommand), new MoveCommand(direction));
+        Simulation.SimulationSingleton.GetInstance().Execute(new MoveCommand(direction));
       }
     }
   }

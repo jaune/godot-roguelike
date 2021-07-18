@@ -4,13 +4,6 @@ using Simulation;
 class NavigationGridDebugNode : Node2D {
   const int TILE_SIZE = 96;
 
-  [Signal]
-  public delegate void OnCommand(Command cmd);
-
-  public void __onCommand(Command cmd) {
-    EmitSignal("OnCommand", cmd);
-  }
-
   // NavigationGrid? grid = null;
 
   Sprite? moveSprite = null;
@@ -132,15 +125,7 @@ class NavigationGridDebugNode : Node2D {
         var vector = (@btn.Position - (GetViewport().Size / 2.0f));
         var dir = CardinalDirectionFromVector2(vector);
 
-        var dest = player.Position.Project(dir);
-        var enemy = sim.FindEnemyAt(dest);
-
-        if (enemy == null) {
-          EmitSignal(nameof(OnCommand), new MoveCommand(dir));
-        }
-        else {
-          EmitSignal(nameof(OnCommand), new DefaultAttackCommand(dir));
-        }
+        Simulation.SimulationSingleton.GetInstance().Execute(new DefaultCommand(dir));
       }
     }
   }

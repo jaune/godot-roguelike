@@ -16,6 +16,15 @@ namespace Simulation
       this.lastMutations = new Mutation[0];
     }
 
+    private List<Action> subscritions = new List<Action>();
+
+    public Action Subscribe (Action next) {
+      subscritions.Add(next);
+      return () => {
+        subscritions.Remove(next);
+      };
+    }
+
     public Actor GetPlayer() {
       return state.player;
     }
@@ -53,6 +62,10 @@ namespace Simulation
 
       foreach (var mutation in mutations) {
         Mutate(mutation);
+      }
+
+      foreach (var sub in subscritions) {
+        sub();
       }
 
       this.lastMutations = mutations;

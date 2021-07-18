@@ -6,9 +6,6 @@ public class MoveTiles : Node2D
 
     private PackedScene? tileScene;
 
-    [Signal]
-    public delegate void OnCommand(Command cmd);
-
     public override void _Ready()
     {
       tileScene = GD.Load<PackedScene>("./MoveTile.tscn");
@@ -23,10 +20,6 @@ public class MoveTiles : Node2D
       AddTile(Simulation.CardinalDirection.NorthWest, new Vector2(-TILE_SIZE, -TILE_SIZE));
     }
 
-    public void __onCommand(Command cmd) {
-      EmitSignal("OnCommand", cmd);
-    }
-
     private Node? AddTile(Simulation.CardinalDirection direction, Vector2 position) {
       if (tileScene == null) {
         return null;
@@ -37,8 +30,6 @@ public class MoveTiles : Node2D
       tile.direction = direction;
 
       tile.Position = position;
-
-      tile.Connect("OnCommand", this, nameof(__onCommand));
 
       this.AddChild(tile);
 

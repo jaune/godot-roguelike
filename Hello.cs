@@ -8,8 +8,6 @@ public class Hello : Node2D
 
   Simulation.Simulation sim = SimulationSingleton.GetInstance();
 
-  private bool busy = false;
-
   PackedScene? kenneyPackedScene = null;
 
   public override void _Ready()
@@ -22,11 +20,14 @@ public class Hello : Node2D
 
     var move = GetNode<Node2D>("./Player/DefaultActions");
 
-    move.Connect("OnCommand", this, nameof(__onCommand));
-
     initializeState();
 
     synchronizeScene();
+
+    SimulationSingleton.GetInstance().Subscribe(() => {
+      GetTree().CallGroup("simulation.mutations.listener", "_OnMutations");
+      interpolateScene();
+    });
   }
 
   public override void _UnhandledInput(InputEvent @event)
@@ -35,36 +36,20 @@ public class Hello : Node2D
       if (eventKey.Pressed) {
         switch (eventKey.Scancode) {
           case (int)KeyList.Up:
-            __onCommand(new DefaultCommand(Simulation.CardinalDirection.North));
+            sim.Execute(new DefaultCommand(Simulation.CardinalDirection.North));
             break;
           case (int)KeyList.Down:
-            __onCommand(new DefaultCommand(Simulation.CardinalDirection.South));
+            sim.Execute(new DefaultCommand(Simulation.CardinalDirection.South));
             break;
           case (int)KeyList.Right:
-            __onCommand(new DefaultCommand(Simulation.CardinalDirection.East));
+            sim.Execute(new DefaultCommand(Simulation.CardinalDirection.East));
             break;
           case (int)KeyList.Left:
-            __onCommand(new DefaultCommand(Simulation.CardinalDirection.West));
+            sim.Execute(new DefaultCommand(Simulation.CardinalDirection.West));
             break;
         }
       }
     }
-  }
-
-  public void __onCommand (Command cmd) {
-    if (busy) {
-      return;
-    }
-
-    busy = true;
-
-    sim.Execute(cmd);
-
-    GetTree().CallGroup("simulation.mutations.listener", "_OnMutations");
-
-    interpolateScene();
-
-    busy = false;
   }
 
   private void initializeState() {
