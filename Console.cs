@@ -7,7 +7,11 @@ public class Console : RichTextLabel
     var mutations = SimulationSingleton.GetInstance().GetLastMutations();
 
     foreach (var mutation in mutations) {
-      AppendBbcode("\n" + mutation.ToConsoleString());
+      var s = mutation.ToConsoleString();
+
+      if (s.Length > 0) {
+        AppendBbcode("\n" + s);
+      }
     }
   }
 }
@@ -16,22 +20,27 @@ public static class MutationConsoleExtensions
 {
   public static string ToConsoleString(this Simulation.Mutation mutation)
   {
-    if (mutation is Simulation.MoveMutation) {
-      return MoveMutationToConsoleString((Simulation.MoveMutation)mutation);
-    }
-    else if (mutation is Simulation.DefaultAttackMutation) {
-      return DefaultAttackMutationToConsoleString((Simulation.DefaultAttackMutation)mutation);
+    switch (mutation) {
+      case Simulation.MoveMutation m:
+        return m.ToConsoleString();
+      case Simulation.DefaultAttackMutation m:
+        return m.ToConsoleString();
+      case Simulation.DeathMutation m:
+        return m.ToConsoleString();
     }
 
     return "";
   }
 
-  private static string MoveMutationToConsoleString(Simulation.MoveMutation mutation) {
+  private static string ToConsoleString(this Simulation.MoveMutation mutation) {
     return $"{mutation.Subject.DisplayName} moved";
   }
 
-  private static string DefaultAttackMutationToConsoleString(Simulation.DefaultAttackMutation mutation) {
+  private static string ToConsoleString(this Simulation.DefaultAttackMutation mutation) {
     return $"{mutation.Subject.DisplayName} dealt {mutation.Damage} to {mutation.Target.DisplayName}";
   }
 
+    private static string ToConsoleString(this Simulation.DeathMutation mutation) {
+    return $"{mutation.Subject.DisplayName} die";
+  }
 }

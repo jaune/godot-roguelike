@@ -58,7 +58,7 @@ public class Hello : Node2D
 
     busy = true;
 
-    var mutations = sim.Execute(cmd);
+    sim.Execute(cmd);
 
     GetTree().CallGroup("simulation.mutations.listener", "_OnMutations");
 
@@ -87,13 +87,9 @@ public class Hello : Node2D
   }
 
   private void synchronizeScene () {
-    var p = sim.QueryPlayer();
+    var p = sim.GetPlayer();
 
-    if (p == null) {
-      return;
-    }
-
-    var actors = sim.QueryActorsNear(p);
+    var actors = sim.FindActorsNear(p);
 
     var player = GetNode<Node2D>("./Player");
 
@@ -125,12 +121,7 @@ public class Hello : Node2D
     var player = GetNode<Node2D>("./Player");
     var tween = player.GetNode<Tween>("./MoveTween");
 
-    var p = sim.QueryPlayer();
-
-    if (p == null) {
-      return;
-    }
-
+    var p = sim.GetPlayer();
     var destination = new Vector2(p.Position.x * TILE_SIZE, p.Position.y * TILE_SIZE);
 
     tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);

@@ -24,4 +24,26 @@ namespace Simulation
       this.Damage = damage;
     }
   }
+
+  public class DeathMutation: Mutation {
+    public readonly Actor Subject;
+
+    public DeathMutation(Actor subject) {
+      this.Subject = subject;
+    }
+  }
+
+  public static class AddActorMutationExtensions {
+    public static void AddActor(this Simulation sim, Actor actor) {
+      sim.Mutate(new AddActorMutation(actor));
+    }
+  }
+
+  public class AddActorMutation: Mutation {
+    public Actor Actor;
+
+    public AddActorMutation(Actor actor) {
+      Actor = actor;
+    }
+  }
 }

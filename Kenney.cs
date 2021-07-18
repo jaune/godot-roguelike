@@ -80,22 +80,23 @@ public class Kenney : Node2D
 
   public void _OnMutations() {
     if (Reference != Guid.Empty) {
-      var c = SimulationSingleton.GetInstance().QueryActorByReference(Reference);
+      var mutations = SimulationSingleton.GetInstance().GetLastMutations();
 
-      if (c != null) {
-        var delta = c.CurrentHealth - _CurrentHealth;
+      foreach (var mutation in mutations) {
+        if (mutation is DefaultAttackMutation) {
+          var m = (DefaultAttackMutation)mutation;
 
-        if (delta < 0) {
-          _OnHit(Math.Abs(Mathf.RoundToInt(delta)));
-
-          if (c.CurrentHealth <= 0) {
-            _OnDeath();
+          if(m.Target.Reference == Reference) {
+            CurrentHealth = m.Target.CurrentHealth;
+            _OnHit(m.Damage);
           }
         }
-        if (delta != 0) {
-          _CurrentHealth = c.CurrentHealth;
-          _MaximumHealth = c.MaximumHealth;
-          UpdateHealthForeground();
+        else if (mutation is DeathMutation) {
+          var m = (DeathMutation)mutation;
+
+          if (m.Subject.Reference == Reference) {
+            _OnDeath();
+          }
         }
       }
     }

@@ -99,11 +99,7 @@ class NavigationGridDebugNode : Node2D {
 
   public override void _Input (InputEvent @event) {
     var sim = SimulationSingleton.GetInstance();
-    var player = sim.QueryPlayer();
-
-    if (player == null) {
-      return;
-    }
+    var player = sim.GetPlayer();
 
     if (@event is InputEventMouseMotion) {
       var @m = (InputEventMouseMotion)@event;
@@ -114,7 +110,7 @@ class NavigationGridDebugNode : Node2D {
         var v = Vector2FromCardinalDirection(dir);
 
         var dest = player.Position.Project(dir);
-        var enemy = sim.QueryEnemyAt(dest);
+        var enemy = sim.FindEnemyAt(dest);
 
         if (enemy == null) {
           moveSprite.Texture = moveTex;
@@ -137,7 +133,7 @@ class NavigationGridDebugNode : Node2D {
         var dir = CardinalDirectionFromVector2(vector);
 
         var dest = player.Position.Project(dir);
-        var enemy = sim.QueryEnemyAt(dest);
+        var enemy = sim.FindEnemyAt(dest);
 
         if (enemy == null) {
           EmitSignal(nameof(OnCommand), new MoveCommand(dir));

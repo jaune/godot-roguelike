@@ -253,9 +253,9 @@ position = Vector2( 4.36171, 34.2386 )
 texture = ExtResource( 5 )
 
 [node name="body" type="Sprite" parent="character"]
-position = Vector2( -1.16833, -80.084 )
+position = Vector2( -1.16833, -82.2828 )
 texture = ExtResource( 1 )
 
 [node name="head" type="Sprite" parent="character"]
-position = Vector2( 1.49361, -165.246 )
+position = Vector2( 1.49361, -163.779 )
 texture = ExtResource( 2 )

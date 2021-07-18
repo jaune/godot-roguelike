@@ -16,116 +16,128 @@ namespace Simulation
       this.lastMutations = new Mutation[0];
     }
 
-    private Mutation[] PerformMove(Position destination) {
-      var other = state.characters.Find(c => c.Position.Equals(destination));
-
-      if (other == null) {
-        state.player.Position.x = destination.x;
-        state.player.Position.y = destination.y;
-      }
-
-      return new Mutation[]{
-        new MoveMutation(state.player, destination)
-      };
-    }
-
-    private Mutation[] PerformDefaultAttack(Actor target) {
-      target.CurrentHealth -= 10;
-
-      // TODO: if (target.CurrentHealth <= 0) death mutation
-
-      return new Mutation[]{
-        new DefaultAttackMutation(state.player, target, 10)
-      };
-    }
-
-    public Actor? QueryPlayer() {
+    public Actor GetPlayer() {
       return state.player;
     }
 
-    public List<Actor> QueryActorsNear(Actor subject) {
+    public List<Actor> FindActorsNear(Actor subject) {
       return state.characters;
     }
 
-    public Actor? QueryEnemyAt(int x, int y) {
-      return QueryEnemyAt(new Position(x, y));
+    public Actor? FindEnemyAt(int x, int y) {
+      return FindEnemyAt(new Position(x, y));
     }
 
-    public Actor? QueryEnemyAt(Position pos) {
+    public Actor? FindEnemyAt(Position pos) {
       return state.characters.Find(c => c.Position.Equals(pos));
     }
 
-    public Actor? QueryActorByReference(Guid reference) {
+    public Actor? FindActorByReference(Guid reference) {
       return state.characters.Find(c => c.Reference == reference);
     }
 
-    private Mutation[] ExecuteDefaultCommand(DefaultCommand cmd) {
-      var destination = state.player.Position.Project(cmd.direction);
-      var target = QueryEnemyAt(destination);
-
-      if (target == null) {
-        return PerformMove(destination);
+    private Mutation[] _Execute(Command command) {
+      switch (command) {
+        case MoveCommand cmd:
+          return cmd.Execute(this);
+        case DefaultAttackCommand cmd:
+          return cmd.Execute(this);
+        case DefaultCommand cmd:
+          return cmd.Execute(this);
       }
-      else {
-        return PerformDefaultAttack(target);
-      }
-    }
-
-    private Mutation[] ExecuteMoveCommand(MoveCommand cmd) {
-      var destination = state.player.Position.Project(cmd.direction);
-
-      return PerformMove(destination);
-    }
-
-    private Mutation[] ExecuteDefaultAttackCommand(DefaultAttackCommand cmd) {
-      var destination = state.player.Position.Project(cmd.direction);
-      var target = QueryEnemyAt(destination);
-
-      if (target != null) {
-        return PerformDefaultAttack(target);
-      }
-
       return new Mutation[0];
     }
 
-    public Mutation[] Execute(Command cmd) {
-      var mutations = new Mutation[0];
+    public void Execute(Command command) {
+      var mutations = _Execute(command);
 
-      if (cmd is MoveCommand) {
-        mutations = ExecuteMoveCommand((MoveCommand)cmd);
-      }
-      else if (cmd is DefaultAttackCommand) {
-        mutations = ExecuteDefaultAttackCommand((DefaultAttackCommand)cmd);
-      }
-      else if (cmd is DefaultCommand) {
-        mutations = ExecuteDefaultCommand((DefaultCommand)cmd);
+      foreach (var mutation in mutations) {
+        Mutate(mutation);
       }
 
       this.lastMutations = mutations;
-
-      return mutations;
     }
 
-    public void Mutate(Mutation m) {
-      if (m is AddActorMutation) {
-        var c = (AddActorMutation)m;
+    public void Mutate(Mutation um) {
+      if (um is AddActorMutation) {
+        var m = (AddActorMutation)um;
 
-        state.characters.Add(c.Actor);
+        state.characters.Add(m.Actor);
+      }
+      else if (um is DefaultAttackMutation) {
+        var m = (DefaultAttackMutation)um;
+
+        m.Target.CurrentHealth -= m.Damage;
+      }
+      else if (um is MoveMutation) {
+        var m = (MoveMutation)um;
+
+        m.Subject.Position = m.Destination;
+      }
+    }
+
+    public bool IsWalkableBy(Actor subject, Position destination) {
+      return state.characters.Find(c => c.Position.Equals(destination)) == null;
+    }
+  }
+
+  static class ExecuteMoveCommand {
+    static public Mutation[] Execute(this MoveCommand cmd, Simulation sim) {
+      var subject = sim.GetPlayer();
+      var destination = subject.Position.Project(cmd.direction);
+
+      return new Mutation[]{
+        new MoveMutation(subject, destination)
+      };
+    }
+  }
+
+  static class ExecuteDefaultCommand {
+    static public Mutation[] Execute(this DefaultCommand cmd, Simulation sim) {
+      var subject = sim.GetPlayer();
+      var destination = subject.Position.Project(cmd.direction);
+      var target = sim.FindEnemyAt(destination);
+
+      if (target == null) {
+        if (sim.IsWalkableBy(subject, destination)) {
+          return new Mutation[]{
+            new MoveMutation(subject, destination)
+          };
+        }
+        return new Mutation[0];
+      }
+      else {
+        return ExecuteDefaultAttackCommand.Execute(subject, target, sim);
       }
     }
   }
 
-  public static class AddActorMutationExtensions {
-    public static void AddActor(this Simulation sim, Actor actor) {
-      sim.Mutate(new AddActorMutation(actor));
+  static class ExecuteDefaultAttackCommand {
+    static public Mutation[] Execute(Actor subject, Actor target, Simulation sim) {
+      int damage = 10;
+
+      if ((target.CurrentHealth - damage) <= 0) {
+        return new Mutation[]{
+          new DefaultAttackMutation(subject, target, damage),
+          new DeathMutation(target),
+        };
+      }
+
+      return new Mutation[]{
+        new DefaultAttackMutation(subject, target, damage)
+      };
     }
-  }
 
-  public class AddActorMutation: Mutation {
-    public Actor Actor;
+    static public Mutation[] Execute(this DefaultAttackCommand cmd, Simulation sim) {
+      var subject = sim.GetPlayer();
+      var destination = subject.Position.Project(cmd.direction);
+      var target = sim.FindEnemyAt(destination);
 
-    public AddActorMutation(Actor actor) {
-      Actor = actor;
+      if (target != null) {
+        return Execute(subject, target, sim);
+      }
+
+      return new Mutation[0];
     }
   }
 }
