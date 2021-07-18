@@ -3,3 +3,6 @@
 *.translation
 out
 .vscode
+
+bin
+obj

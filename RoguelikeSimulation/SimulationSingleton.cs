@@ -1,8 +1,6 @@
-using System;
-
 namespace Simulation
 {
-  class SimulationSingleton {
+  public class SimulationSingleton {
     private Simulation Simulation;
 
     private SimulationSingleton() {
