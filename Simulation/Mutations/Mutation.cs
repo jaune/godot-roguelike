@@ -3,11 +3,11 @@ namespace Simulation
   public interface Mutation {
   }
 
-  public class MoveMutation: Mutation {
+  public class WalkMutation: Mutation {
     public readonly Actor Subject;
     public readonly Position Destination;
 
-    public MoveMutation(Actor subject, Position destination) {
+    public WalkMutation(Actor subject, Position destination) {
       this.Subject = subject;
       this.Destination = destination;
     }

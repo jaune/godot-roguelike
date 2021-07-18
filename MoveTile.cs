@@ -66,7 +66,7 @@ public class MoveTile : Node2D
       var @btn = (InputEventMouseButton)@event;
 
       if (@btn.IsPressed() && icon != null && icon.Visible && @btn.ButtonIndex == (int)ButtonList.Right) {
-        Simulation.SimulationSingleton.GetInstance().Execute(new MoveCommand(direction));
+        Simulation.SimulationSingleton.GetInstance().Execute(new WalkCommand(direction));
       }
     }
   }

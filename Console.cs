@@ -21,7 +21,7 @@ public static class MutationConsoleExtensions
   public static string ToConsoleString(this Simulation.Mutation mutation)
   {
     switch (mutation) {
-      case Simulation.MoveMutation m:
+      case Simulation.WalkMutation m:
         return m.ToConsoleString();
       case Simulation.DefaultAttackMutation m:
         return m.ToConsoleString();
@@ -32,7 +32,7 @@ public static class MutationConsoleExtensions
     return "";
   }
 
-  private static string ToConsoleString(this Simulation.MoveMutation mutation) {
+  private static string ToConsoleString(this Simulation.WalkMutation mutation) {
     return $"{mutation.Subject.DisplayName} moved";
   }
 

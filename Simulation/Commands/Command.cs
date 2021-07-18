@@ -2,10 +2,10 @@
 public class Command {
 }
 
-class MoveCommand: Command {
+class WalkCommand: Command {
   public Simulation.CardinalDirection direction;
 
-  public MoveCommand (Simulation.CardinalDirection direction) {
+  public WalkCommand (Simulation.CardinalDirection direction) {
     this.direction = direction;
   }
 }

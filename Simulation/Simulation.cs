@@ -47,7 +47,7 @@ namespace Simulation
 
     private Mutation[] _Execute(Command command) {
       switch (command) {
-        case MoveCommand cmd:
+        case WalkCommand cmd:
           return cmd.Execute(this);
         case DefaultAttackCommand cmd:
           return cmd.Execute(this);
@@ -82,8 +82,8 @@ namespace Simulation
 
         m.Target.CurrentHealth -= m.Damage;
       }
-      else if (um is MoveMutation) {
-        var m = (MoveMutation)um;
+      else if (um is WalkMutation) {
+        var m = (WalkMutation)um;
 
         m.Subject.Position = m.Destination;
       }
@@ -94,13 +94,13 @@ namespace Simulation
     }
   }
 
-  static class ExecuteMoveCommand {
-    static public Mutation[] Execute(this MoveCommand cmd, Simulation sim) {
+  static class ExecuteWalkCommand {
+    static public Mutation[] Execute(this WalkCommand cmd, Simulation sim) {
       var subject = sim.GetPlayer();
       var destination = subject.Position.Project(cmd.direction);
 
       return new Mutation[]{
-        new MoveMutation(subject, destination)
+        new WalkMutation(subject, destination)
       };
     }
   }
@@ -114,7 +114,7 @@ namespace Simulation
       if (target == null) {
         if (sim.IsWalkableBy(subject, destination)) {
           return new Mutation[]{
-            new MoveMutation(subject, destination)
+            new WalkMutation(subject, destination)
           };
         }
         return new Mutation[0];
