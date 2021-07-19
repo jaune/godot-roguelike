@@ -236,7 +236,6 @@ __meta__ = {
 }
 
 [node name="character" type="Node2D" parent="."]
-modulate = Color( 1, 1, 1, 1 )
 
 [node name="leg_left" type="Sprite" parent="character"]
 position = Vector2( -26.1705, -23.1479 )
@@ -267,9 +266,9 @@ position = Vector2( 4.36171, 34.2386 )
 texture = ExtResource( 5 )
 
 [node name="body" type="Sprite" parent="character"]
-position = Vector2( -1.16833, -81.4912 )
+position = Vector2( -1.16833, -82.225 )
 texture = ExtResource( 1 )
 
 [node name="head" type="Sprite" parent="character"]
-position = Vector2( 1.49361, -164.307 )
+position = Vector2( 1.49361, -163.817 )
 texture = ExtResource( 2 )

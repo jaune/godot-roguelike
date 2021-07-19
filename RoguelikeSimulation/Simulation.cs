@@ -38,7 +38,7 @@ namespace Simulation
     }
 
     public Actor? FindEnemyAt(Position pos) {
-      return state.characters.Find(c => c.Position.Equals(pos));
+      return state.characters.Find(c => c.Position.Equals(pos) && (c.CurrentHealth > 0));
     }
 
     public Actor? FindActorByReference(Guid reference) {
