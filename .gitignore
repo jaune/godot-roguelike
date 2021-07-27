@@ -3,6 +3,7 @@
 *.translation
 out
 .vscode
+*.tiled-session
 
 bin
 obj
