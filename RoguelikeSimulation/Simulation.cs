@@ -34,10 +34,10 @@ namespace Simulation
     }
 
     public Actor? FindEnemyAt(int x, int y) {
-      return FindEnemyAt(new Position(x, y));
+      return FindEnemyAt(new Location(x, y));
     }
 
-    public Actor? FindEnemyAt(Position pos) {
+    public Actor? FindEnemyAt(Location pos) {
       return state.characters.Find(c => c.Position.Equals(pos) && (c.CurrentHealth > 0));
     }
 
@@ -89,7 +89,7 @@ namespace Simulation
       }
     }
 
-    public bool IsWalkableBy(Actor subject, Position destination) {
+    public bool IsWalkableBy(Actor subject, Location destination) {
       return state.characters.Find(c => c.Position.Equals(destination)) == null;
     }
   }

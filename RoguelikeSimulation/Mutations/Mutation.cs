@@ -5,9 +5,9 @@ namespace Simulation
 
   public class WalkMutation: Mutation {
     public readonly Actor Subject;
-    public readonly Position Destination;
+    public readonly Location Destination;
 
-    public WalkMutation(Actor subject, Position destination) {
+    public WalkMutation(Actor subject, Location destination) {
       this.Subject = subject;
       this.Destination = destination;
     }

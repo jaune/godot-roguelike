@@ -1,20 +1,20 @@
 namespace Simulation
 {
-  public class Position {
+  public class Location {
     public int x;
     public int y;
 
-    public Position() {
+    public Location() {
       this.x = 0;
       this.y = 0;
     }
 
-    public Position(Position pos) {
+    public Location(Location pos) {
       this.x = pos.x;
       this.y = pos.y;
     }
 
-    public Position(int x, int y) {
+    public Location(int x, int y) {
       this.x = x;
       this.y = y;
     }
@@ -24,7 +24,7 @@ namespace Simulation
       this.y = y;
     }
 
-    public bool Equals(Position other) {
+    public bool Equals(Location other) {
       return other.x == this.x && other.y == this.y;
     }
 
@@ -32,8 +32,8 @@ namespace Simulation
       return $"Position({this.x},{this.y})";
     }
 
-    public Position Project(CardinalDirection d) {
-      var copy = new Position(this);
+    public Location Project(CardinalDirection d) {
+      var copy = new Location(this);
 
       copy.Move(d);
 
