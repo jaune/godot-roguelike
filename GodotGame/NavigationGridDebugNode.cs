@@ -102,7 +102,7 @@ class NavigationGridDebugNode : Node2D {
         var dir = CardinalDirectionFromVector2(vector);
         var v = Vector2FromCardinalDirection(dir);
 
-        var dest = player.Position.Project(dir);
+        var dest = player.Location.Project(dir);
         var enemy = sim.FindEnemyAt(dest);
 
         if (enemy == null) {

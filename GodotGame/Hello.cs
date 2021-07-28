@@ -56,7 +56,7 @@ public class Hello : Node2D
     {
       var enemy = new Simulation.Actor("Enemy");
 
-      enemy.Position.Set(5, 5);
+      enemy.Location.Set(5, 5);
 
       sim.AddActor(enemy);
     }
@@ -64,7 +64,7 @@ public class Hello : Node2D
     {
       var enemy = new Simulation.Actor("Enemy");
 
-      enemy.Position.Set(8, 8);
+      enemy.Location.Set(8, 8);
       enemy.CurrentHealth = 10;
 
       sim.AddActor(enemy);
@@ -85,13 +85,13 @@ public class Hello : Node2D
 
     foreach (var a in actors) {
       if (a == p) {
-        player.Position = new Vector2(a.Position.x * TILE_SIZE, a.Position.y * TILE_SIZE);
+        player.Position = new Vector2(a.Location.x * TILE_SIZE, a.Location.y * TILE_SIZE);
       }
       else {
         var kenney = kenneyPackedScene.Instance<Kenney>();
 
         kenney.Reference = a.Reference;
-        kenney.Position = new Vector2(a.Position.x * TILE_SIZE, a.Position.y * TILE_SIZE);
+        kenney.Position = new Vector2(a.Location.x * TILE_SIZE, a.Location.y * TILE_SIZE);
         kenney.MaximumHealth = a.MaximumHealth;
         kenney.CurrentHealth = a.CurrentHealth;
         kenney.AddToGroup("simulation.mutations.listener");
@@ -107,7 +107,7 @@ public class Hello : Node2D
     var tween = player.GetNode<Tween>("./MoveTween");
 
     var p = sim.GetPlayer();
-    var destination = new Vector2(p.Position.x * TILE_SIZE, p.Position.y * TILE_SIZE);
+    var destination = new Vector2(p.Location.x * TILE_SIZE, p.Location.y * TILE_SIZE);
 
     tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);
     tween.Start();

@@ -38,7 +38,7 @@ namespace Simulation
     }
 
     public Actor? FindEnemyAt(Location pos) {
-      return state.characters.Find(c => c.Position.Equals(pos) && (c.CurrentHealth > 0));
+      return state.characters.Find(c => c.Location.Equals(pos) && (c.CurrentHealth > 0));
     }
 
     public Actor? FindActorByReference(Guid reference) {
@@ -85,19 +85,19 @@ namespace Simulation
       else if (um is WalkMutation) {
         var m = (WalkMutation)um;
 
-        m.Subject.Position = m.Destination;
+        m.Subject.Location = m.Destination;
       }
     }
 
     public bool IsWalkableBy(Actor subject, Location destination) {
-      return state.characters.Find(c => c.Position.Equals(destination)) == null;
+      return state.characters.Find(c => c.Location.Equals(destination)) == null;
     }
   }
 
   static class ExecuteWalkCommand {
     static public Mutation[] Execute(this WalkCommand cmd, Simulation sim) {
       var subject = sim.GetPlayer();
-      var destination = subject.Position.Project(cmd.direction);
+      var destination = subject.Location.Project(cmd.direction);
 
       return new Mutation[]{
         new WalkMutation(subject, destination)
@@ -108,7 +108,7 @@ namespace Simulation
   static class ExecuteDefaultCommand {
     static public Mutation[] Execute(this DefaultCommand cmd, Simulation sim) {
       var subject = sim.GetPlayer();
-      var destination = subject.Position.Project(cmd.direction);
+      var destination = subject.Location.Project(cmd.direction);
       var target = sim.FindEnemyAt(destination);
 
       if (target == null) {
@@ -143,7 +143,7 @@ namespace Simulation
 
     static public Mutation[] Execute(this DefaultAttackCommand cmd, Simulation sim) {
       var subject = sim.GetPlayer();
-      var destination = subject.Position.Project(cmd.direction);
+      var destination = subject.Location.Project(cmd.direction);
       var target = sim.FindEnemyAt(destination);
 
       if (target != null) {
