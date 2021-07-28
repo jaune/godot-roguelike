@@ -1,0 +1,19 @@
+{
+  "TilePixelSize": {
+    "x": 64,
+    "y": 64
+  },
+  "ChunkTileSize": {
+    "x": 32,
+    "y": 32
+  },
+  "Chunks": [
+    {
+      "Position": {
+        "x": 0,
+        "y": 0
+      },
+      "ScenePath": "TileMap.tscn"
+    }
+  ]
+}

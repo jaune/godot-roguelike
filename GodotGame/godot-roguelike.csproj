@@ -2,6 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\RoguelikeSimulation\RoguelikeSimulation.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>godotroguelike</RootNamespace>
