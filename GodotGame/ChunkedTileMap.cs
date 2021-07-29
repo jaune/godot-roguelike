@@ -3,19 +3,22 @@ using System;
 
 public class ChunkedTileMap
 {
-  public class ChunkMetadata {
-    public Vector2i Position;
-    public string ScenePath;
+  private MapMetadata meta;
 
-    public ChunkMetadata(Vector2i pos, string path) {
-      ScenePath = path;
-      Position = pos;
-    }
+  public ChunkedTileMap(MapMetadata meta) {
+    this.meta = meta;
   }
 
-  public Vector2i TilePixelSize = new Vector2i(64, 64);
-  public Vector2i ChunkTileSize = new Vector2i(32, 32);
-  public ChunkMetadata[] Chunks = new ChunkMetadata[0];
+  public Vector2i TilePixelSize {
+    get {
+      return this.meta.TilePixelSize;
+    }
+  }
+  public Vector2i ChunkTileSize {
+    get {
+      return this.meta.ChunkTileSize;
+    }
+  }
 
   public Vector2i ChunkPixelSize {
     get {
@@ -23,17 +26,26 @@ public class ChunkedTileMap
     }
   }
 
-  public ChunkMetadata? Find(Vector2i pos) {
-    var index = Array.FindIndex(Chunks, (c) => c.Position.Equals(pos));
+  public Node? LoadScene(Vector2i pos) {
+    var index = Array.FindIndex(this.meta.Chunks, (c) => c.Position.Equals(pos));
 
     if (index == -1) {
       return null;
     }
 
-    return Chunks[index];
+    var path = $"{this.meta.BasePath}/chunk.{pos.x}.{pos.y}.tscn";
+
+    if (ResourceLoader.Exists(path)) {
+      var chunkPackedScene = ResourceLoader.Load<PackedScene>(path, null, true);
+      return chunkPackedScene.Instance();
+    }
+
+    // TODO: add fake data when missing
+    GD.PrintErr($"ChunkedTileMap: Missing map chunk {path}");
+    return null;
   }
 
   public override string ToString() {
-    return $"TilePixelSize: {TilePixelSize}\nChunkTileSize: {ChunkTileSize}\n Chunks: [{Chunks.Length}]";
+    return $"TilePixelSize: {TilePixelSize}\nChunkTileSize: {ChunkTileSize}\n Chunks: [{meta.Chunks.Length}]";
   }
 }

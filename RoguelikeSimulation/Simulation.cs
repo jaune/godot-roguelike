@@ -4,16 +4,37 @@ using System.Collections.Generic;
 namespace Simulation
 {
   public class Simulation {
-    private State state;
+    private Map[] maps;
+    private Actor player;
+    private List<Actor> characters;
     private Mutation[] lastMutations;
+
+    private Simulation(Map[] worlds) {
+      this.maps = worlds;
+      this.player = new Actor("Player", GetDefaultPlayerSpawnLocation());
+      this.characters = new List<Actor>(1);
+      this.characters.Add(this.player);
+      this.lastMutations = new Mutation[0];
+    }
+
+    public static Simulation Create(Map[] worlds) {
+      if (worlds.Length < 1) {
+        throw new Exception("Simulation.Create: must have a world.");
+      }
+
+      return new Simulation(worlds);
+    }
+
+    public Map GetDefaultWorld() {
+      return this.maps[0];
+    }
+
+    public Location GetDefaultPlayerSpawnLocation() {
+      return GetDefaultWorld().GetDefaultPlayerSpawnLocation();
+    }
 
     public Mutation[] GetLastMutations() {
       return lastMutations;
-    }
-
-    public Simulation() {
-      this.state = new State();
-      this.lastMutations = new Mutation[0];
     }
 
     private List<Action> subscritions = new List<Action>();
@@ -26,23 +47,19 @@ namespace Simulation
     }
 
     public Actor GetPlayer() {
-      return state.player;
+      return player;
     }
 
     public List<Actor> FindActorsNear(Actor subject) {
-      return state.characters;
-    }
-
-    public Actor? FindEnemyAt(int x, int y) {
-      return FindEnemyAt(new Location(x, y));
+      return characters;
     }
 
     public Actor? FindEnemyAt(Location pos) {
-      return state.characters.Find(c => c.Location.Equals(pos) && (c.CurrentHealth > 0));
+      return characters.Find(c => c.Location.Equals(pos) && (c.CurrentHealth > 0));
     }
 
     public Actor? FindActorByReference(Guid reference) {
-      return state.characters.Find(c => c.Reference == reference);
+      return characters.Find(c => c.Reference == reference);
     }
 
     private Mutation[] _Execute(Command command) {
@@ -75,7 +92,7 @@ namespace Simulation
       if (um is AddActorMutation) {
         var m = (AddActorMutation)um;
 
-        state.characters.Add(m.Actor);
+        characters.Add(m.Actor);
       }
       else if (um is DefaultAttackMutation) {
         var m = (DefaultAttackMutation)um;
@@ -90,7 +107,10 @@ namespace Simulation
     }
 
     public bool IsWalkableBy(Actor subject, Location destination) {
-      return state.characters.Find(c => c.Location.Equals(destination)) == null;
+      if (!destination.IsWalkable()) {
+        return false;
+      }
+      return characters.Find(c => c.Location.Equals(destination)) == null;
     }
   }
 

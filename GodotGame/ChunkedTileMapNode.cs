@@ -13,58 +13,40 @@ public class ChunkedTileMapNode : Node2D
   }
 
   string Path = "res://maps/Test";
-  ChunkedTileMap ChunkedTileMap = new ChunkedTileMap();
+  ChunkedTileMap? ChunkedTileMap = null;
   Vector2i CurrentPosition = new Vector2i(0, 0);
 
-  Vector2 ChunksPerViewport {
-    get {
-      return (GetViewport().Size / ChunkedTileMap.ChunkPixelSize);
-    }
+  Vector2 GetChunksPerViewport(ChunkedTileMap map) {
+    return (GetViewport().Size / map.ChunkPixelSize);
   }
 
-  private Vector2i GetCurrentChunk () {
+  private Vector2i GetCurrentChunk (ChunkedTileMap map) {
     var screenPosition = (GetViewportTransform() * GetGlobalTransform()).Xform(Position);
-    var chunk = (screenPosition.Round() / ChunkedTileMap.ChunkPixelSize).Round();
+    var chunk = (screenPosition.Round() / map.ChunkPixelSize).Round();
 
     return new Vector2i(Mathf.RoundToInt(-chunk.x), Mathf.RoundToInt(-chunk.y));
   }
 
   public override void _Ready()
   {
-    //  GD.Print(ChunkedTileMap.ToJsonString());
+    ChunkedTileMap = new ChunkedTileMap(MapMetadataLoader.Load(Path));
 
-    var path = $"{Path}/index.json";
-
-    var file = new File();
-
-    if (file.Open(path, File.ModeFlags.Read) != Error.Ok) {
-      GD.PrintErr($"Unable to read {path}");
-      return;
-    }
-
-    var map = JsonString.ToChunkedTileMap(file.GetAsText());
-
-    if (map == null) {
-      GD.PrintErr($"Unable to deserialize {path}");
-      return;
-    }
-
-    ChunkedTileMap = map;
-
-    UpdateCurrentPosition(GetCurrentChunk());
+    UpdateCurrentPosition(ChunkedTileMap, GetCurrentChunk(ChunkedTileMap));
   }
 
   public override void _Process(float delta) {
-    var pos = GetCurrentChunk();
+    if (ChunkedTileMap != null) {
+      var pos = GetCurrentChunk(ChunkedTileMap);
 
-    if (!CurrentPosition.Equals(pos)) {
-      UpdateCurrentPosition(pos);
+      if (!CurrentPosition.Equals(pos)) {
+        UpdateCurrentPosition(ChunkedTileMap, pos);
+      }
     }
   }
 
   List<Chunk> Chunks = new List<Chunk>();
 
-  private Chunk AddChunk(Vector2i pos) {
+  private Chunk AddChunk(ChunkedTileMap map, Vector2i pos) {
     // GD.Print(
     //   "=== add chunk (", pos.x, ",", pos.y, ") ==="
     // );
@@ -72,21 +54,12 @@ public class ChunkedTileMapNode : Node2D
     var chunk = new Chunk(pos);
 
     var container = new Node2D();
-    container.Position = new Vector2(ChunkedTileMap.ChunkPixelSize * pos);
+    container.Position = new Vector2(map.ChunkPixelSize * pos);
 
-    var metadata = ChunkedTileMap.Find(pos);
+    var scn = map.LoadScene(pos);
 
-    if (metadata != null) {
-      var path = $"{Path}/{metadata.ScenePath}";
-
-      if (ResourceLoader.Exists(path)) {
-        var chunkPackedScene = ResourceLoader.Load<PackedScene>(path, null, true);
-        container.AddChild(chunkPackedScene.Instance());
-      }
-      else {
-        // TODO: add fake data when missing
-        GD.PrintErr($"ChunkedTileMap: Missing map chunk {path}");
-      }
+    if (scn != null) {
+      container.AddChild(scn);
     }
 
     var label = new Label();
@@ -102,11 +75,11 @@ public class ChunkedTileMapNode : Node2D
     return chunk;
   }
 
-  private Chunk EnsureChunk(Vector2i pos) {
+  private Chunk EnsureChunk(ChunkedTileMap map, Vector2i pos) {
     var c = Chunks.Find((c) => { return c.Position.Equals(pos); });
 
     if (c == null) {
-      c = AddChunk(pos);
+      c = AddChunk(map, pos);
     }
 
     return c;
@@ -121,13 +94,13 @@ public class ChunkedTileMapNode : Node2D
     Chunks.Remove(c);
   }
 
-  private void UpdateCurrentPosition(Vector2i pos) {
+  private void UpdateCurrentPosition(ChunkedTileMap map, Vector2i pos) {
     // GD.Print(
     //   "=== update current position (", pos.x, ",", pos.y, ") === \n"
     // );
 
     CurrentPosition = pos;
-    var count = ChunksPerViewport.Ceil();
+    var count = GetChunksPerViewport(map).Ceil();
 
     var minX = CurrentPosition.x - ((int)count.x * 2);
     var maxX = CurrentPosition.x + ((int)count.x * 2);
@@ -144,7 +117,7 @@ public class ChunkedTileMapNode : Node2D
 
     for (int x = minX; x < maxX; x++) {
       for (int y = minY; y < maxY; y++) {
-        EnsureChunk(new Vector2i(
+        EnsureChunk(map, new Vector2i(
           x,
           y
         ));

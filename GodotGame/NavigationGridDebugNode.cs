@@ -2,7 +2,7 @@ using Godot;
 using Simulation;
 
 class NavigationGridDebugNode : Node2D {
-  const int TILE_SIZE = 96;
+  const int TILE_SIZE = 64;
 
   // NavigationGrid? grid = null;
 
@@ -81,15 +81,6 @@ class NavigationGridDebugNode : Node2D {
     // }
   }
 
-  private (int, int) computeGridPositionFromViewport(Vector2 pos) {
-    GD.Print(Position);
-
-    return (
-      Mathf.CeilToInt(((pos.x) / (float)TILE_SIZE*2.0f) - 0.5f),
-      Mathf.CeilToInt(((pos.y) / (float)TILE_SIZE*2.0f) - 0.5f)
-    );
-  }
-
   public override void _Input (InputEvent @event) {
     var sim = SimulationSingleton.GetInstance();
     var player = sim.GetPlayer();
@@ -125,7 +116,7 @@ class NavigationGridDebugNode : Node2D {
         var vector = (@btn.Position - (GetViewport().Size / 2.0f));
         var dir = CardinalDirectionFromVector2(vector);
 
-        Simulation.SimulationSingleton.GetInstance().Execute(new DefaultCommand(dir));
+        sim.Execute(new DefaultCommand(dir));
       }
     }
   }

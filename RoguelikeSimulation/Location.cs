@@ -3,33 +3,30 @@ namespace Simulation
   public class Location {
     public int x;
     public int y;
-
-    public Location() {
-      this.x = 0;
-      this.y = 0;
-    }
+    public readonly Map map;
 
     public Location(Location pos) {
       this.x = pos.x;
       this.y = pos.y;
+      this.map = pos.map;
     }
 
-    public Location(int x, int y) {
+    public Location(Map map, int x, int y) {
       this.x = x;
       this.y = y;
+      this.map = map;
     }
 
-    public void Set(int x, int y) {
-      this.x = x;
-      this.y = y;
+    public bool IsWalkable() {
+      return this.map.IsWalkable(x, y);
     }
 
     public bool Equals(Location other) {
-      return other.x == this.x && other.y == this.y;
+      return (other.x == this.x) && (other.y == this.y) && (other.map == this.map);
     }
 
     public override string ToString() {
-      return $"Position({this.x},{this.y})";
+      return $"Location({x}, {y}, {map})";
     }
 
     public Location Project(CardinalDirection d) {

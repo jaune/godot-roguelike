@@ -9,9 +9,9 @@ namespace Simulation
     public int MaximumHealth = 100;
     public string DisplayName;
 
-    public Actor(string name) {
+    public Actor(string name, Location location) {
       Reference = Guid.NewGuid();
-      Location = new Location();
+      Location = location;
       DisplayName = name;
     }
   }

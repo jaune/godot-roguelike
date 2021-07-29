@@ -1,19 +1,20 @@
 namespace Simulation
 {
   public class SimulationSingleton {
-    private Simulation Simulation;
+    static private Simulation? Instance = null;
 
-    private SimulationSingleton() {
-      Simulation = new Simulation();
+    static public Simulation SetInstance (Simulation i) {
+      if (Instance != null) {
+        throw new System.Exception("SimulationSingleton: Instance already set.");
+      }
+      return Instance = i;
     }
-
-    static private SimulationSingleton? Instance = null;
 
     static public Simulation GetInstance () {
       if (Instance == null) {
-        Instance = new SimulationSingleton();
+        throw new System.Exception("SimulationSingleton: Instance should be set before using it.");
       }
-      return Instance.Simulation;
+      return Instance;
     }
   }
 }

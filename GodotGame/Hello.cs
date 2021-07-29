@@ -1,12 +1,10 @@
 using Godot;
 using Simulation;
-
+using System.Collections.Generic;
 
 public class Hello : Node2D
 {
   const int TILE_SIZE = 96;
-
-  Simulation.Simulation sim = SimulationSingleton.GetInstance();
 
   PackedScene? kenneyPackedScene = null;
 
@@ -20,11 +18,11 @@ public class Hello : Node2D
 
     var move = GetNode<Node2D>("./Player/DefaultActions");
 
-    initializeState();
+    var sim = SimulationSingleton.SetInstance(createSimulation());
 
     synchronizeScene();
 
-    SimulationSingleton.GetInstance().Subscribe(() => {
+    sim.Subscribe(() => {
       GetTree().CallGroup("simulation.mutations.listener", "_OnMutations");
       interpolateScene();
     });
@@ -34,6 +32,8 @@ public class Hello : Node2D
   {
     if (@event is InputEventKey eventKey) {
       if (eventKey.Pressed) {
+        var sim = Simulation.SimulationSingleton.GetInstance();
+
         switch (eventKey.Scancode) {
           case (int)KeyList.Up:
             sim.Execute(new DefaultCommand(Simulation.CardinalDirection.North));
@@ -52,26 +52,44 @@ public class Hello : Node2D
     }
   }
 
-  private void initializeState() {
-    {
-      var enemy = new Simulation.Actor("Enemy");
+  Dictionary<Simulation.Map, MapMetadata> MapMetadata_IndexedBy_SimulationMap = new Dictionary<Simulation.Map, MapMetadata>();
 
-      enemy.Location.Set(5, 5);
+  private Simulation.Simulation createSimulation() {
+    var builder = new Simulation.Builder();
+
+    var meta = MapMetadataLoader.Load("res://maps/Test");
+    var map = SimulationMapLoader.Load(meta);
+
+    MapMetadata_IndexedBy_SimulationMap.Add(map, meta);
+
+    var w = builder.AddMap(map);
+    var sim = builder.Build();
+
+    {
+      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(5, 5));
 
       sim.AddActor(enemy);
     }
 
     {
-      var enemy = new Simulation.Actor("Enemy");
+      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(5, 5));
 
-      enemy.Location.Set(8, 8);
       enemy.CurrentHealth = 10;
 
       sim.AddActor(enemy);
     }
+
+    return sim;
+  }
+
+  private Vector2 ProjectLocationToScenePosition(Simulation.Location loc) {
+    var meta = MapMetadata_IndexedBy_SimulationMap[loc.map];
+
+    return new Vector2(loc.x * meta.TilePixelSize.x, loc.y * meta.TilePixelSize.y);
   }
 
   private void synchronizeScene () {
+    var sim = Simulation.SimulationSingleton.GetInstance();
     var p = sim.GetPlayer();
 
     var actors = sim.FindActorsNear(p);
@@ -84,30 +102,32 @@ public class Hello : Node2D
     }
 
     foreach (var a in actors) {
+      var newPos = ProjectLocationToScenePosition(a.Location);
+
       if (a == p) {
-        player.Position = new Vector2(a.Location.x * TILE_SIZE, a.Location.y * TILE_SIZE);
+        player.Position = newPos;
       }
       else {
         var kenney = kenneyPackedScene.Instance<Kenney>();
 
         kenney.Reference = a.Reference;
-        kenney.Position = new Vector2(a.Location.x * TILE_SIZE, a.Location.y * TILE_SIZE);
+        kenney.Position = newPos;
         kenney.MaximumHealth = a.MaximumHealth;
         kenney.CurrentHealth = a.CurrentHealth;
         kenney.AddToGroup("simulation.mutations.listener");
 
         AddChild(kenney);
-
       }
     }
   }
 
   private void interpolateScene () {
+    var sim = Simulation.SimulationSingleton.GetInstance();
     var player = GetNode<Node2D>("./Player");
     var tween = player.GetNode<Tween>("./MoveTween");
 
     var p = sim.GetPlayer();
-    var destination = new Vector2(p.Location.x * TILE_SIZE, p.Location.y * TILE_SIZE);
+    var destination = ProjectLocationToScenePosition(p.Location);
 
     tween.InterpolateProperty(player, "position", player.Position, destination.Round(), 0.3f);
     tween.Start();
