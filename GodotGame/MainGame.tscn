@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://MainGame.cs" type="Script" id=1]
+[ext_resource path="res://Kenney.tscn" type="PackedScene" id=2]
+[ext_resource path="res://NavigationGridDebugNode.cs" type="Script" id=3]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ChunkedTileMapNode.cs" type="Script" id=5]
+[ext_resource path="res://DialogueBubble.tscn" type="PackedScene" id=6]
+[ext_resource path="res://InfiniteFoliage.cs" type="Script" id=11]
+
+[node name="Scene" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ChunkedTileMapNode" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="InfiniteFoliage" type="Node2D" parent="."]
+position = Vector2( 491.77, 433.985 )
+script = ExtResource( 11 )
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2( 384, 384 )
+
+[node name="Kenney" parent="Player" instance=ExtResource( 2 )]
+position = Vector2( 0, 0 )
+
+[node name="DefaultActions" type="Node2D" parent="Player"]
+position = Vector2( 0, -31.4289 )
+script = ExtResource( 3 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2( 7.98816, -11.4505 )
+current = true
+smoothing_enabled = true
+
+[node name="MoveTween" type="Tween" parent="Player"]
+
+[node name="Foreground" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="Foreground" instance=ExtResource( 4 )]
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+margin_left = -6.8811
+margin_top = -8.66742
+margin_right = 1037.12
+margin_bottom = 614.333
+color = Color( 0.376471, 0.737255, 0.505882, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DialogueBubble" parent="." instance=ExtResource( 6 )]
+visible = false
+position = Vector2( 365.268, 138.98 )
