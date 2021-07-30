@@ -5,15 +5,21 @@ namespace Simulation
 {
   public class Simulation {
     private Map[] maps;
-    private Actor player;
+    private Actor? player = null;
     private List<Actor> characters;
     private Mutation[] lastMutations;
 
     private Simulation(Map[] worlds) {
       this.maps = worlds;
-      this.player = new Actor("Player", GetDefaultPlayerSpawnLocation());
-      this.characters = new List<Actor>(1);
-      this.characters.Add(this.player);
+      this.characters = new List<Actor>();
+
+      var spawn = FindDefaultPlayerSpawnLocation();
+
+      if (spawn != null) {
+        this.player = new Actor("Player", spawn);
+        this.characters.Add(this.player);
+      }
+
       this.lastMutations = new Mutation[0];
     }
 
@@ -29,8 +35,8 @@ namespace Simulation
       return this.maps[0];
     }
 
-    public Location GetDefaultPlayerSpawnLocation() {
-      return GetDefaultWorld().GetDefaultPlayerSpawnLocation();
+    public Location? FindDefaultPlayerSpawnLocation() {
+      return GetDefaultWorld().FindDefaultPlayerSpawnLocation();
     }
 
     public Mutation[] GetLastMutations() {
@@ -46,7 +52,17 @@ namespace Simulation
       };
     }
 
+    public Actor? FindPlayer() {
+      return player;
+    }
+
     public Actor GetPlayer() {
+      var player = FindPlayer();
+
+      if (player == null) {
+        throw new System.Exception("Missing player");
+      }
+
       return player;
     }
 

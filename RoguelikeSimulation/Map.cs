@@ -18,8 +18,8 @@ namespace Simulation
 
   public class Map {
     public enum WalkableValue : byte {
-      Yes = 1,
-      No = 2,
+      Yes = 2,
+      No = 1,
       Undefined = 0
     }
 
@@ -31,15 +31,17 @@ namespace Simulation
     public readonly string DisplayName;
     public readonly Vector2i ChunkSize;
     public readonly Chunk[] Chunks;
+    public readonly Vector2i? DefaultPlayerSpawn;
 
-    public Map(string name, Vector2i chunkSize, Chunk[] chunks) {
+    public Map(string name, Vector2i chunkSize, Chunk[] chunks, Vector2i? defaultPlayerSpawn = null) {
       DisplayName = name;
       ChunkSize = chunkSize;
       Chunks = chunks;
+      DefaultPlayerSpawn = defaultPlayerSpawn;
     }
 
-    public Location GetDefaultPlayerSpawnLocation() {
-      return CreateLocation(0, 0);
+    public Location? FindDefaultPlayerSpawnLocation() {
+      return DefaultPlayerSpawn != null ? CreateLocation(DefaultPlayerSpawn.x, DefaultPlayerSpawn.y) : null;
     }
 
     public Location CreateLocation(int x, int y) {
@@ -57,24 +59,28 @@ namespace Simulation
     }
 
     public bool IsWalkable(int x, int y) {
-      var p = new Vector2i(x / ChunkSize.x, y / ChunkSize.y);
-      var l = new Vector2i(Math.Abs(x % ChunkSize.x), Math.Abs(y % ChunkSize.y));
+      var p = new Vector2i(
+        (int)Math.Floor((float)x / (float)ChunkSize.x) * ChunkSize.x,
+        (int)Math.Floor((float)y / (float)ChunkSize.y) * ChunkSize.y
+      );
 
       Console.WriteLine($"=== IsWalkable => {x}, {y}");
 
       var c = FindChunk(p);
 
-      Console.WriteLine($"=== IsWalkable - chunk => {p.x}, {p.y} == {c != null}");
-
       if (c == null) {
         return false;
       }
 
+      var chk = c ?? throw new Exception();
+
+      var l = new Vector2i(x - p.x, y - p.y);
+
       var index = (l.x) + (l.y * ChunkSize.x);
 
-      Console.WriteLine($"=== IsWalkable - chunk=({p.x}, {p.y}) index={index} {c?.Walkable[index]}");
+      Console.WriteLine($"=== IsWalkable - absolute({x}, {y}) -- chunk({p.x}, {p.y}) -- relative({l.x}, {l.y}) -- {index} {chk.Walkable[index]}");
 
-      return c?.Walkable[index] == WalkableValue.Yes;
+      return chk.Walkable[index] == WalkableValue.Yes;
     }
 
     public override string ToString() {

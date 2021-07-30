@@ -57,8 +57,14 @@ public class MainGame : Node2D
   private Simulation.Simulation createSimulation() {
     var builder = new Simulation.Builder();
 
+    var scene = ResourceLoader.Load<PackedScene>("res://maps/Test/Test0.tscn").Instance();
+
+
+    AddChild(scene);
+    MoveChild(scene, 0);
+
     var meta = MapMetadataLoader.Load("res://maps/Test");
-    var map = SimulationMapLoader.Load(meta);
+    var map = SimulationMapLoader.Load("res://maps/Test/Test0.simulation.json");
 
     MapMetadata_IndexedBy_SimulationMap.Add(map, meta);
 

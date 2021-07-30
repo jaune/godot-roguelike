@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="left-up" width="100" height="100" tilewidth="64" tileheight="64" infinite="1" nextlayerid="4" nextobjectid="5">
+<map version="1.5" tiledversion="1.7.1" orientation="orthogonal" renderorder="left-up" width="100" height="100" tilewidth="64" tileheight="64" infinite="1" nextlayerid="5" nextobjectid="5">
  <editorsettings>
   <chunksize width="32" height="32"/>
+  <export target="../../GodotGame/maps/Test/Test0.tscn" format="GodotRoguelike"/>
  </editorsettings>
  <tileset firstgid="1" source="basic-tileset.tsx"/>
  <layer id="1" name="Tile Layer 1" width="100" height="100">
@@ -961,7 +962,7 @@
   </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" name="player-spawn" x="-49.4545" y="-58.6667">
+  <object id="1" name="player-spawn" x="-32" y="-16">
    <properties>
     <property name="kind:player-spawn" type="bool" value="true"/>
    </properties>
