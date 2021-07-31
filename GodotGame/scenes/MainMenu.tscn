@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/MainMenu.cs" type="Script" id=1]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.12247
+margin_bottom = -1.12244
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="VBoxContainer" parent="."]
+margin_left = 84.0
+margin_top = 122.0
+margin_right = 279.0
+margin_bottom = 339.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewGameButton" type="Button" parent="Menu"]
+margin_right = 195.0
+margin_bottom = 20.0
+text = "New Game"
+
+[node name="Spliter" type="VSplitContainer" parent="Menu"]
+margin_top = 24.0
+margin_right = 195.0
+margin_bottom = 193.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quit" type="Button" parent="Menu"]
+margin_top = 197.0
+margin_right = 195.0
+margin_bottom = 217.0
+text = "Quit"
+
+[connection signal="pressed" from="Menu/Quit" to="." method="onQuitPressed"]
