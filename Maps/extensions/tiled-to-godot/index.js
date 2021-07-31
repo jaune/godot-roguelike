@@ -119,6 +119,9 @@ const buildTileMapSceneString = (map) => {
         '[ext_resource path="res://maps/Test/tileset.tres" type="TileSet" id=1]',
         '',
         '[node name="TileMapChunk" type="Node2D"]',
+        '__meta__ = {',
+        `  "cell_size": Vector2( ${map.tileWidth}, ${map.tileHeight} ),`,
+        '}',
         '',
     ];
     for (let layerIndex = 0; layerIndex < map.layerCount; layerIndex++) {
@@ -215,7 +218,6 @@ const buildSimulationData = (map) => {
             chunk.Walkable[indexInChunk] = value;
         });
     });
-    console.log(Object.values(chunks).map(({ Position }) => (`${Position.x} ${Position.y} -- `)));
     let DefaultPlayerSpawn = null;
     visitObjectLayer(map, (layer) => {
         if (!DefaultPlayerSpawn) {

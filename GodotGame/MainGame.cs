@@ -1,12 +1,10 @@
 using Godot;
 using Simulation;
-using System.Collections.Generic;
 
 public class MainGame : Node2D
 {
-  const int TILE_SIZE = 96;
-
   PackedScene? kenneyPackedScene = null;
+  Vector2 TilePixelSize = new Vector2(32, 32);
 
   public override void _Ready()
   {
@@ -19,6 +17,17 @@ public class MainGame : Node2D
     var move = GetNode<Node2D>("./Player/DefaultActions");
 
     var sim = SimulationSingleton.SetInstance(createSimulation());
+
+    var scene = ResourceLoader.Load<PackedScene>("res://maps/Test/Test0.tscn").Instance();
+
+    var cellSize = scene.GetMeta("cell_size");
+
+    if (cellSize != null && cellSize is Vector2) {
+      TilePixelSize = (Vector2)cellSize;
+    }
+
+    AddChild(scene);
+    MoveChild(scene, 0);
 
     synchronizeScene();
 
@@ -52,21 +61,10 @@ public class MainGame : Node2D
     }
   }
 
-  Dictionary<Simulation.Map, MapMetadata> MapMetadata_IndexedBy_SimulationMap = new Dictionary<Simulation.Map, MapMetadata>();
-
   private Simulation.Simulation createSimulation() {
     var builder = new Simulation.Builder();
 
-    var scene = ResourceLoader.Load<PackedScene>("res://maps/Test/Test0.tscn").Instance();
-
-
-    AddChild(scene);
-    MoveChild(scene, 0);
-
-    var meta = MapMetadataLoader.Load("res://maps/Test");
     var map = SimulationMapLoader.Load("res://maps/Test/Test0.simulation.json");
-
-    MapMetadata_IndexedBy_SimulationMap.Add(map, meta);
 
     var w = builder.AddMap(map);
     var sim = builder.Build();
@@ -89,9 +87,7 @@ public class MainGame : Node2D
   }
 
   private Vector2 ProjectLocationToScenePosition(Simulation.Location loc) {
-    var meta = MapMetadata_IndexedBy_SimulationMap[loc.map];
-
-    return new Vector2(loc.x * meta.TilePixelSize.x, loc.y * meta.TilePixelSize.y);
+    return new Vector2(loc.x * TilePixelSize.x + (TilePixelSize.x / 2), loc.y * TilePixelSize.y + (TilePixelSize.y / 2));
   }
 
   private void synchronizeScene () {

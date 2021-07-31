@@ -156,6 +156,9 @@ const buildTileMapSceneString = (map: TileMap) => {
     '[ext_resource path="res://maps/Test/tileset.tres" type="TileSet" id=1]',
     '',
     '[node name="TileMapChunk" type="Node2D"]',
+    '__meta__ = {',
+    `  "cell_size": Vector2( ${map.tileWidth}, ${map.tileHeight} ),`,
+    '}',
     '',
   ]
 
@@ -297,8 +300,6 @@ const buildSimulationData = (map: TileMap) => {
       chunk.Walkable[indexInChunk] = value;
     })
   })
-
-  console.log(Object.values(chunks).map(({ Position }) => (`${Position.x} ${Position.y} -- `)));
 
   let DefaultPlayerSpawn: null | { x: number, y: number }  = null;
 
