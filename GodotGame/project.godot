@@ -8,16 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Object",
-"class": "TypeFormattingLogic",
-"language": "GDScript",
-"path": "res://addons/metadata_inspector/TypeFormattingLogic.gd"
-} ]
-_global_script_class_icons={
-"TypeFormattingLogic": ""
-}
-
 [application]
 
 config/name="godot-roguelike"
