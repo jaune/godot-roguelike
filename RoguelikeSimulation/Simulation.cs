@@ -6,18 +6,18 @@ namespace Simulation
   public class Simulation {
     private Map[] maps;
     private Actor? player = null;
-    private List<Actor> characters;
+    private List<Actor> actors;
     private Mutation[] lastMutations;
 
     private Simulation(Map[] worlds) {
       this.maps = worlds;
-      this.characters = new List<Actor>();
+      this.actors = new List<Actor>();
 
       var spawn = FindDefaultPlayerSpawnLocation();
 
       if (spawn != null) {
         this.player = new Actor("Player", spawn);
-        this.characters.Add(this.player);
+        this.actors.Add(this.player);
       }
 
       this.lastMutations = new Mutation[0];
@@ -67,15 +67,15 @@ namespace Simulation
     }
 
     public List<Actor> FindActorsNear(Actor subject) {
-      return characters;
+      return actors;
     }
 
     public Actor? FindEnemyAt(Location pos) {
-      return characters.Find(c => c.Location.Equals(pos) && (c.CurrentHealth > 0));
+      return actors.Find(c => c.Location.Equals(pos) && (c.CurrentHealth > 0));
     }
 
     public Actor? FindActorByReference(Guid reference) {
-      return characters.Find(c => c.Reference == reference);
+      return actors.Find(c => c.Reference == reference);
     }
 
     private Mutation[] _Execute(Command command) {
@@ -108,7 +108,7 @@ namespace Simulation
       if (um is AddActorMutation) {
         var m = (AddActorMutation)um;
 
-        characters.Add(m.Actor);
+        actors.Add(m.Actor);
       }
       else if (um is DefaultAttackMutation) {
         var m = (DefaultAttackMutation)um;
@@ -126,7 +126,7 @@ namespace Simulation
       if (!destination.IsWalkable()) {
         return false;
       }
-      return characters.Find(c => c.Location.Equals(destination)) == null;
+      return actors.Find(c => c.Location.Equals(destination)) == null;
     }
   }
 
