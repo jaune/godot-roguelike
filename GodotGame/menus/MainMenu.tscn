@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scenes/MainMenu.cs" type="Script" id=1]
+[ext_resource path="res://menus/MainMenu.cs" type="Script" id=1]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -13,10 +13,10 @@ __meta__ = {
 }
 
 [node name="Menu" type="VBoxContainer" parent="."]
-margin_left = 84.0
-margin_top = 122.0
-margin_right = 279.0
-margin_bottom = 339.0
+margin_left = 766.457
+margin_top = 333.023
+margin_right = 961.457
+margin_bottom = 550.023
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -26,8 +26,20 @@ margin_right = 195.0
 margin_bottom = 20.0
 text = "New Game"
 
-[node name="Spliter" type="VSplitContainer" parent="Menu"]
+[node name="ContinueButton" type="Button" parent="Menu"]
 margin_top = 24.0
+margin_right = 195.0
+margin_bottom = 44.0
+text = "Continue"
+
+[node name="LoadGameButton" type="Button" parent="Menu"]
+margin_top = 48.0
+margin_right = 195.0
+margin_bottom = 68.0
+text = "Load"
+
+[node name="Spliter" type="VSplitContainer" parent="Menu"]
+margin_top = 72.0
 margin_right = 195.0
 margin_bottom = 193.0
 size_flags_vertical = 3

@@ -37,13 +37,35 @@ public class MainGame : Node2D
     });
   }
 
+  Control InGameMenu {
+    get {
+      return GetNode<Control>("InGameMenu/InGameMenu");
+    }
+  }
+
+  public void onInGameMenuRequestClose() {
+    InGameMenu.Visible = false;
+  }
+
+  private void OpenInGameMenu() {
+    InGameMenu.Visible = true;
+  }
+
   public override void _UnhandledInput(InputEvent @event)
   {
+    if (InGameMenu.Visible) {
+      return;
+    }
+
     if (@event is InputEventKey eventKey) {
       if (eventKey.Pressed) {
         var sim = Simulation.SimulationSingleton.GetInstance();
 
         switch (eventKey.Scancode) {
+          case (int)KeyList.Escape:
+            OpenInGameMenu();
+            GetTree().SetInputAsHandled();
+            break;
           case (int)KeyList.Up:
             sim.Execute(new DefaultCommand(Simulation.CardinalDirection.North));
             break;
@@ -76,7 +98,7 @@ public class MainGame : Node2D
     }
 
     {
-      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(5, 5));
+      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(10, 10));
 
       enemy.CurrentHealth = 10;
 
