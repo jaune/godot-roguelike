@@ -134,10 +134,9 @@ public class MainGame : Node2D
       else {
         var kenney = kenneyPackedScene.Instance<Kenney>();
 
-        kenney.Reference = a.Reference;
+        kenney.SetActor(a);
         kenney.Position = newPos;
-        kenney.MaximumHealth = a.MaximumHealth;
-        kenney.CurrentHealth = a.CurrentHealth;
+
         kenney.AddToGroup("simulation.mutations.listener");
 
         AddChild(kenney);

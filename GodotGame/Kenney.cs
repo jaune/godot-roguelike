@@ -6,50 +6,11 @@ public class Kenney : Node2D
 {
   public Guid Reference = Guid.Empty;
 
-  private int _CurrentHealth = 100;
-
-  [Export(PropertyHint.Range, "1,10000,1")]
-  public int CurrentHealth {
-    get {
-      return _CurrentHealth;
-    }
-    set {
-      _CurrentHealth = value;
-      UpdateHealthForeground();
-    }
-  }
-
-  private int _MaximumHealth = 100;
-
-  [Export(PropertyHint.Range, "1,10000,1")]
-  public int MaximumHealth {
-    get {
-      return _MaximumHealth;
-    }
-    set {
-      _MaximumHealth = value;
-      UpdateHealthForeground();
-    }
-  }
-
-  private void UpdateHealthForeground() {
-    var foreground = GetNode<ColorRect>("health/foreground");
-
-    var ratio = Mathf.Max(0.0f, (float)_CurrentHealth / (float)_MaximumHealth);
-
-    if (foreground != null) {
-      foreground.RectScale = new Vector2(ratio, 1.0f);
-    }
-  }
-
   PackedScene? HealthParticulePackedScene = null;
 
   public override void _Ready()
   {
     HealthParticulePackedScene = ResourceLoader.Load<PackedScene>("res://HealthParticule.tscn");
-
-
-    UpdateHealthForeground();
   }
 
   private void TravelAnimationTreeTo(string name) {
@@ -78,6 +39,18 @@ public class Kenney : Node2D
     TravelAnimationTreeTo("hit");
   }
 
+  HealthBar HealthBar {
+    get {
+      return GetNode<HealthBar>("./health");
+    }
+  }
+
+  public void SetActor (Simulation.Actor a) {
+    Reference = a.Reference;
+    HealthBar.MaximumHealth = a.MaximumHealth;
+    HealthBar.CurrentHealth = a.CurrentHealth;
+  }
+
   public void _OnMutations() {
     if (Reference != Guid.Empty) {
       var mutations = SimulationSingleton.GetInstance().GetLastMutations();
@@ -87,7 +60,7 @@ public class Kenney : Node2D
           var m = (DefaultAttackMutation)mutation;
 
           if(m.Target.Reference == Reference) {
-            CurrentHealth = m.Target.CurrentHealth;
+            HealthBar.CurrentHealth = m.Target.CurrentHealth;
             _OnHit(m.Damage);
           }
         }
