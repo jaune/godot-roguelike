@@ -2,20 +2,6 @@ using System;
 
 namespace Simulation
 {
-  public class Vector2i {
-    public int x;
-    public int y;
-
-    public Vector2i(int x, int y) {
-      this.x = x;
-      this.y = y;
-    }
-
-    public bool Equals (Vector2i o) {
-      return o.x == x && o.y == y;
-    }
-  }
-
   public class Map {
     public enum WalkableValue : byte {
       Yes = 2,
@@ -64,8 +50,6 @@ namespace Simulation
         (int)Math.Floor((float)y / (float)ChunkSize.y) * ChunkSize.y
       );
 
-      Console.WriteLine($"=== IsWalkable => {x}, {y}");
-
       var c = FindChunk(p);
 
       if (c == null) {
@@ -77,8 +61,6 @@ namespace Simulation
       var l = new Vector2i(x - p.x, y - p.y);
 
       var index = (l.x) + (l.y * ChunkSize.x);
-
-      Console.WriteLine($"=== IsWalkable - absolute({x}, {y}) -- chunk({p.x}, {p.y}) -- relative({l.x}, {l.y}) -- {index} {chk.Walkable[index]}");
 
       return chk.Walkable[index] == WalkableValue.Yes;
     }

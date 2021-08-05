@@ -4,13 +4,20 @@
 
 - https://godotengine.org/download
 
-
-dotnet tool restore
-
+```sh
+$ dotnet tool restore
+```
 https://www.jetbrains.com/help/resharper/ReSharper_Command_Line_Tools.html
 
-dotnet jb inspectcode -o="inspectcode.xml" godot-roguelike.sln
+```sh
+$ dotnet jb inspectcode -o="inspectcode.xml" godot-roguelike.sln
+```
 
+## Run tests
+
+```sh
+$ dotnet test
+```
 
 ## Credit
 
