@@ -3,11 +3,25 @@ using System.Collections.Generic;
 
 namespace Simulation
 {
+  public class Health {
+    public int Current;
+    public int Max = 100;
+
+    public Health(int c = 100, int m = 100) {
+      Current = c;
+      Max = m;
+    }
+  }
+
   public class Simulation {
+    Database.Database Db = new Database.Database();
+
     private Map[] maps;
     private Actor? player = null;
     private List<Actor> actors;
     private Mutation[] lastMutations;
+
+    Database.Prototype Zombie;
 
     private Simulation(Map[] worlds) {
       this.maps = worlds;
@@ -21,6 +35,10 @@ namespace Simulation
       }
 
       this.lastMutations = new Mutation[0];
+
+      Zombie = Db.NewPrototype((p) => {
+        p.With(new Health());
+      });
     }
 
     public static Simulation Create(Map[] worlds) {
@@ -29,6 +47,10 @@ namespace Simulation
       }
 
       return new Simulation(worlds);
+    }
+
+    public Database.Entry InsertZombie(Action<Database.PrototypeBuilder> build) {
+      return Db.Insert(Zombie, build);
     }
 
     public Map GetDefaultWorld() {

@@ -91,19 +91,18 @@ public class MainGame : Node2D
     var w = builder.AddMap(map);
     var sim = builder.Build();
 
-    {
-      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(5, 5));
+    var zombieFactory = ResourceLoader.Load<PackedScene>("res://scenes/KenneyZombie.tscn");
 
-      sim.AddActor(enemy);
-    }
+    sim.InsertZombie((e) => {
+      e.With(w.CreateLocation(5, 5));
+      e.With(zombieFactory);
+    });
 
-    {
-      var enemy = new Simulation.Actor("Enemy", w.CreateLocation(10, 10));
-
-      enemy.CurrentHealth = 10;
-
-      sim.AddActor(enemy);
-    }
+    sim.InsertZombie((e) => {
+      e.With(w.CreateLocation(10, 10));
+      e.With(new Health(10));
+      e.With(zombieFactory);
+    });
 
     return sim;
   }
