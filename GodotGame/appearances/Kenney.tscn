@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/KenneyMan/leg.png" type="Texture" id=3]
 [ext_resource path="res://assets/KenneyMan/arm.png" type="Texture" id=4]
 [ext_resource path="res://assets/KenneyMan/hand.png" type="Texture" id=5]
-[ext_resource path="res://Kenney.cs" type="Script" id=6]
+[ext_resource path="res://appearances/Kenney.cs" type="Script" id=6]
 [ext_resource path="res://assets/KenneyMan/headDead.png" type="Texture" id=7]
 [ext_resource path="res://HealthBar.tscn" type="PackedScene" id=8]
 

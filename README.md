@@ -10,7 +10,7 @@ $ dotnet tool restore
 https://www.jetbrains.com/help/resharper/ReSharper_Command_Line_Tools.html
 
 ```sh
-$ dotnet jb inspectcode -o="inspectcode.xml" godot-roguelike.sln
+$ dotnet jb inspectcode -o="inspectcode.xml" GodotGame/godot-roguelike.sln
 ```
 
 ## Run tests

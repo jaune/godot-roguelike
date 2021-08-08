@@ -17,6 +17,7 @@ namespace Simulation
 
       if (spawn != null) {
         this.player = new Actor("Player", spawn);
+        this.player.Appearance = Appearance.Human;
         this.actors.Add(this.player);
       }
 

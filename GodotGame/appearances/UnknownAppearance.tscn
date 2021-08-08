@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://appearances/UnknownAppearance.cs" type="Script" id=1]
+
+[node name="UnknownAppearance" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = -26.0
+margin_top = -76.335
+margin_right = 26.0
+margin_bottom = 15.665
+color = Color( 0.972549, 0, 0.819608, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

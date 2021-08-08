@@ -1,12 +1,12 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://MainGame.cs" type="Script" id=1]
-[ext_resource path="res://Kenney.tscn" type="PackedScene" id=2]
+[ext_resource path="res://appearances/Kenney.tscn" type="PackedScene" id=2]
 [ext_resource path="res://NavigationGridDebugNode.cs" type="Script" id=3]
 [ext_resource path="res://HUD.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ChunkedTileMapNode.cs" type="Script" id=5]
 [ext_resource path="res://DialogueBubble.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/KenneyZombie.tscn" type="PackedScene" id=7]
+[ext_resource path="res://appearances/KenneyZombie.tscn" type="PackedScene" id=7]
 [ext_resource path="res://menus/InGameMenu.tscn" type="PackedScene" id=8]
 [ext_resource path="res://InfiniteFoliage.cs" type="Script" id=11]
 

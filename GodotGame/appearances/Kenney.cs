@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Simulation;
 
-public class Kenney : Node2D
+public class Kenney: ActorAppearance
 {
   public Guid Reference = Guid.Empty;
 
@@ -17,6 +17,12 @@ public class Kenney : Node2D
     var animationTree = GetNode<AnimationTree>("AnimationTree");
     var playback = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
     playback.Travel(name);
+  }
+
+  public override void SetActor (Simulation.Actor a) {
+    Reference = a.Reference;
+    HealthBar.MaximumHealth = a.MaximumHealth;
+    HealthBar.CurrentHealth = a.CurrentHealth;
   }
 
   private void _OnDeath() {
@@ -43,12 +49,6 @@ public class Kenney : Node2D
     get {
       return GetNode<HealthBar>("./health");
     }
-  }
-
-  public void SetActor (Simulation.Actor a) {
-    Reference = a.Reference;
-    HealthBar.MaximumHealth = a.MaximumHealth;
-    HealthBar.CurrentHealth = a.CurrentHealth;
   }
 
   public void _OnMutations() {
